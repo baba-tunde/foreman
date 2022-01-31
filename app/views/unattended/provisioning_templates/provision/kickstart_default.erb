@@ -237,7 +237,7 @@ wget
 <% end -%>
 @Core
 <% if host_param_true?('fips_enabled') -%>
-<%=   snippet 'fips_packages' %>
+<%=   snippet '3.1-stable-lcsb-fips_packages' %>
 <% end -%>
 <%= section_end %>
 
@@ -271,20 +271,20 @@ exec < /dev/tty3 > /dev/tty3
 chvt 3
 (
 logger "Starting anaconda <%= @host %> postinstall"
-<%= snippet 'kickstart_networking_setup' %>
+<%= snippet '3.1-stable-lcsb-kickstart_networking_setup' %>
 
-<%= snippet 'ntp' %>
+<%= snippet '3.1-stable-lcsb-ntp' %>
 
-<%= snippet 'yum_proxy' %>
+<%= snippet '3.1-stable-lcsb-yum_proxy' %>
 
 <% if rhel_compatible && host_param_true?('enable-epel') -%>
-<%= snippet 'epel' -%>
+<%= snippet '3.1-stable-lcsb-epel' -%>
 <% end -%>
 
-<%= snippet 'redhat_register' %>
+<%= snippet '3.1-stable-lcsb-redhat_register' %>
 
 <% if host_enc['parameters']['realm'] && @host.realm && (@host.realm.realm_type == 'FreeIPA' || @host.realm.realm_type == 'Red Hat Identity Management') -%>
-<%= snippet 'freeipa_register' %>
+<%= snippet '3.1-stable-lcsb-freeipa_register' %>
 <% end -%>
 
 <% unless host_param_false?('package_upgrade') -%>
@@ -301,18 +301,18 @@ fi
 <%= snippet "blacklist_kernel_modules" %>
 
 <% if chef_enabled %>
-<%= snippet 'chef_client' %>
+<%= snippet '3.1-stable-lcsb-chef_client' %>
 <% end -%>
 
 <% if puppet_enabled %>
 <% if host_param_true?('enable-puppetlabs-repo') || host_param_true?('enable-official-puppet7-repo') || host_param_true?('enable-puppetlabs-puppet6-repo')|| host_param_true?('enable-puppetlabs-puppet5-repo') -%>
-<%= snippet 'puppetlabs_repo' %>
+<%= snippet '3.1-stable-lcsb-puppetlabs_repo' %>
 <% end -%>
-<%= snippet 'puppet_setup' %>
+<%= snippet '3.1-stable-lcsb-puppet_setup' %>
 <% end -%>
 
 <% if salt_enabled %>
-<%= snippet 'saltstack_setup' %>
+<%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
 
 <% if @host.operatingsystem.name == 'OracleLinux' && host_param_true?('disable-uek') -%>
@@ -323,11 +323,11 @@ sed -e 's/DEFAULTKERNEL=kernel-uek/DEFAULTKERNEL=kernel/g' -i /etc/sysconfig/ker
 
 <%= snippet('ansible_provisioning_callback') %>
 
-<%= snippet 'efibootmgr_netboot' %>
+<%= snippet '3.1-stable-lcsb-efibootmgr_netboot' %>
 
 <%= snippet_if_exists(template_name + " custom post") %>
 
-<%= snippet 'insights' -%>
+<%= snippet '3.1-stable-lcsb-insights' -%>
 touch /tmp/foreman_built
 
 chvt 1
@@ -348,7 +348,7 @@ The last post section halts Anaconda to prevent endless loop in case HTTP reques
 %post --erroronfail --log=/root/install-callhome.post.log
 <% end -%>
 
-<%= snippet 'eject_cdrom' -%>
+<%= snippet '3.1-stable-lcsb-eject_cdrom' -%>
 
 if test -f /tmp/foreman_built; then
   echo "calling home: build is done!"

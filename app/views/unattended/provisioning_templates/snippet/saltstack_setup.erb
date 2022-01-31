@@ -26,7 +26,7 @@ fi
 <% end -%>
 
 cat > <%= etc_path %>/minion.d/minion.conf << EOF
-<%= snippet 'saltstack_minion' %>
+<%= snippet '3.1-stable-lcsb-saltstack_minion' %>
 EOF
 
 echo <%= @host.name %> > <%= etc_path %>/minion_id

@@ -94,7 +94,7 @@ description: |
     cmd /c winrm set winrm/config/service/auth @{Certificate="true"}
   <% end %>
 
-  <%= snippet 'Windows network' %>
+  <%= snippet '3.1-stable-lcsb-Windows network' %>
 
   <% if foreman_url('user_data') %>
     echo execute user data script

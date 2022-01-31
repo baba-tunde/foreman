@@ -42,7 +42,7 @@ echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 <% end -%>
 <%= snippet_if_exists(template_name + " custom snippet") %>
 <% if host_enc['parameters']['realm'] && @host.realm && @host.realm.realm_type == 'FreeIPA' -%>
-<%= snippet 'freeipa_register' %>
+<%= snippet '3.1-stable-lcsb-freeipa_register' %>
 <% end -%>
 
 <%= snippet('remote_execution_ssh_keys') %>
@@ -50,22 +50,22 @@ echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 <%= snippet "blacklist_kernel_modules" %>
 
 <% if chef_enabled %>
-<%= snippet 'chef_client' %>
+<%= snippet '3.1-stable-lcsb-chef_client' %>
 <% end -%>
 
 <% if puppet_enabled %>
 <% if host_param_true?('enable-puppetlabs-repo') || host_param_true?('enable-official-puppet7-repo') || host_param_true?('enable-puppetlabs-puppet6-repo') || host_param_true?('enable-puppetlabs-puppet5-repo') -%>
-<%= snippet 'puppetlabs_repo' %>
+<%= snippet '3.1-stable-lcsb-puppetlabs_repo' %>
 <% end -%>
-<%= snippet 'puppet_setup' %>
+<%= snippet '3.1-stable-lcsb-puppet_setup' %>
 <% end -%>
 
 <% if salt_enabled %>
-<%= snippet 'saltstack_setup' %>
+<%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
 
-<%= snippet 'preseed_networking_setup' -%>
-<%= snippet 'efibootmgr_netboot' -%>
-<%= snippet 'eject_cdrom' -%>
-<%= snippet 'built' -%>
-<%= snippet 'schedule_reboot' -%>
+<%= snippet '3.1-stable-lcsb-preseed_networking_setup' -%>
+<%= snippet '3.1-stable-lcsb-efibootmgr_netboot' -%>
+<%= snippet '3.1-stable-lcsb-eject_cdrom' -%>
+<%= snippet '3.1-stable-lcsb-built' -%>
+<%= snippet '3.1-stable-lcsb-schedule_reboot' -%>

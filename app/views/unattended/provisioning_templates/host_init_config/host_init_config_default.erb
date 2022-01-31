@@ -47,19 +47,19 @@ set +e
 trap 'exit_and_cancel_build' ERR
 
 <% if host_puppet_server.present? -%>
-<%= snippet 'puppetlabs_repo' %>
-<%= snippet 'puppet_setup' %>
+<%= snippet '3.1-stable-lcsb-puppetlabs_repo' %>
+<%= snippet '3.1-stable-lcsb-puppet_setup' %>
 <% end -%>
 
 <% if host_param_true?('host_registration_remote_execution') -%>
-<%= snippet 'remote_execution_ssh_keys' %>
+<%= snippet '3.1-stable-lcsb-remote_execution_ssh_keys' %>
 
 <% end -%>
 
 <%= install_packages(host_param('host_packages')) -%>
 
 <% if host_param_true?('host_registration_insights') -%>
-<%= snippet 'insights' %>
+<%= snippet '3.1-stable-lcsb-insights' %>
 
 <% end -%>
 

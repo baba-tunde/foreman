@@ -31,7 +31,7 @@ description: |
 
 <%= snippet_if_exists(template_name + " custom pre") -%>
 <% if @host.subnet.respond_to?(:dhcp_boot_mode?) -%>
-<%= snippet 'kickstart_networking_setup' %>
+<%= snippet '3.1-stable-lcsb-kickstart_networking_setup' %>
 <% if (rhel_compatible && os_major >= 8) -%>
 systemctl restart NetworkManager
 <% else -%>
@@ -44,18 +44,18 @@ service network restart
 echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 <% end -%>
 
-<%= snippet 'yum_proxy' %>
+<%= snippet '3.1-stable-lcsb-yum_proxy' %>
 
-<%= snippet 'ntp' %>
+<%= snippet '3.1-stable-lcsb-ntp' %>
 
 <% if rhel_compatible && host_param_true?('enable-epel') -%>
-<%= snippet 'epel' -%>
+<%= snippet '3.1-stable-lcsb-epel' -%>
 <% end -%>
 
-<%= snippet 'redhat_register' %>
+<%= snippet '3.1-stable-lcsb-redhat_register' %>
 
 <% if host_enc['parameters']['realm'] && @host.realm && (@host.realm.realm_type == 'FreeIPA' || @host.realm.realm_type == 'Red Hat Identity Management') -%>
-<%= snippet 'freeipa_register' %>
+<%= snippet '3.1-stable-lcsb-freeipa_register' %>
 <% end -%>
 
 <% unless host_param_false?('package_upgrade') -%>
@@ -73,18 +73,18 @@ fi
 
 <%= snippet_if_exists(template_name + " custom post") -%>
 <% if chef_enabled %>
-<%= snippet 'chef_client' %>
+<%= snippet '3.1-stable-lcsb-chef_client' %>
 <% end -%>
 
 <% if puppet_enabled %>
 <% if host_param_true?('enable-puppetlabs-repo') || host_param_true?('enable-official-puppet7-repo') || host_param_true?('enable-puppetlabs-puppet6-repo') || host_param_true?('enable-puppetlabs-puppet5-repo') -%>
-<%= snippet 'puppetlabs_repo' %>
+<%= snippet '3.1-stable-lcsb-puppetlabs_repo' %>
 <% end -%>
-<%= snippet 'puppet_setup' %>
+<%= snippet '3.1-stable-lcsb-puppet_setup' %>
 <% end -%>
 
 <% if salt_enabled %>
-<%= snippet 'saltstack_setup' %>
+<%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
 
 <% if host_param_true?('ansible_tower_provisioning') -%>
@@ -95,6 +95,6 @@ chmod +x /root/ansible_provisioning_call.sh
 
 sync
 
-<%= snippet 'schedule_reboot' -%>
+<%= snippet '3.1-stable-lcsb-schedule_reboot' -%>
 
 exit 0

@@ -209,19 +209,19 @@ cp /etc/resolv.conf /mnt/etc
 <%= snippet "blacklist_kernel_modules" %>
 
 <% if spacewalk_enabled -%>
-<%= snippet 'redhat_register' %>
+<%= snippet '3.1-stable-lcsb-redhat_register' %>
 <% end -%>
 
 <% if puppet_enabled -%>
-<%= snippet 'puppet_setup' %>
+<%= snippet '3.1-stable-lcsb-puppet_setup' %>
 <% end -%>
 
 <% if salt_enabled %>
-<%= snippet 'saltstack_setup' %>
+<%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
 
-<%= snippet 'eject_cdrom' -%>
-<%= snippet 'built' -%>
+<%= snippet '3.1-stable-lcsb-eject_cdrom' -%>
+<%= snippet '3.1-stable-lcsb-built' -%>
 
 rm /etc/resolv.conf
 ]]>

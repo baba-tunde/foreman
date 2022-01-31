@@ -44,14 +44,14 @@ pkg update > /root/install/pkg_update.txt
 pkg upgrade -y > /root/install/pkg_upgrade.txt
 
 <% if puppet_enabled %>
-<%= snippet 'puppet_setup' %>
+<%= snippet '3.1-stable-lcsb-puppet_setup' %>
 <% end -%>
 
 <% if salt_enabled %>
-<%= snippet 'saltstack_setup' %>
+<%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
 <%= snippet('remote_execution_ssh_keys') %>
 
-<%= snippet 'schedule_reboot' -%>
+<%= snippet '3.1-stable-lcsb-schedule_reboot' -%>
 
 exit 0

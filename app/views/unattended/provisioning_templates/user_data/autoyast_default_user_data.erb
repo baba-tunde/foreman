@@ -19,7 +19,7 @@ description: |
 #!/bin/bash
 
 <%# Cloud instances frequently have incorrect hosts data %>
-<%= snippet 'fix_hosts' %>
+<%= snippet '3.1-stable-lcsb-fix_hosts' %>
 
 <% if @host.provision_method == 'image' && root_pass.present? -%>
 # Install the root password
@@ -32,14 +32,14 @@ echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 
 <% if puppet_enabled %>
 <% if host_param_true?('enable-official-puppet7-repo') || host_param_true?('enable-puppetlabs-puppet6-repo') || host_param_true?('enable-puppetlabs-puppet5-repo') -%>
-<%= snippet 'puppetlabs_repo' %>
+<%= snippet '3.1-stable-lcsb-puppetlabs_repo' %>
 <% end -%>
-<%= snippet 'puppet_setup' %>
+<%= snippet '3.1-stable-lcsb-puppet_setup' %>
 <% end -%>
 
 <% if salt_enabled %>
-<%= snippet 'saltstack_setup' %>
+<%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
 
 # UserData still needs to mark the build as finished
-<%= snippet 'built' %>
+<%= snippet '3.1-stable-lcsb-built' %>
