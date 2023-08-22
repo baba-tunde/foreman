@@ -1,5 +1,12 @@
 //= require parameter_override
 
+$(document).ready(function() {
+  var searchParams = new URLSearchParams(window.location.search);
+  if(searchParams.has('hostgroup_id')) {
+    var param = searchParams.get('hostgroup_id');
+    $('#host_hostgroup_id').val(param).trigger('change');
+  }
+});
 $(document).on('ContentLoad', function() {
   onHostEditLoad();
 });
@@ -159,7 +166,6 @@ function update_capabilities(capabilities) {
 var stop_pooling;
 
 function submit_with_all_params() {
-  var host_unique_name = construct_host_name();
   $('form.hostresource-form input[type="submit"]').attr('disabled', true);
   stop_pooling = false;
   $('body').css('cursor', 'progress');
@@ -173,9 +179,9 @@ function submit_with_all_params() {
     success: function(response, _responseStatus, _jqXHR) {
       // workaround for redirecting to the new host details page
       if (!response.includes('id="main"')) {
-        return tfm.nav.pushUrl(tfm.tools.foremanUrl('/new/hosts/' + host_unique_name));
+        return tfm.nav.pushUrl(tfm.tools.foremanUrl('/new/hosts/' + construct_host_name()));
       }
-   
+
       $('#host-progress').hide();
       $('#content').replaceWith($('#content', response));
       $(document.body).trigger('ContentLoad');

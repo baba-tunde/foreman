@@ -68,6 +68,8 @@ module Hostext
 
       scoped_search :relation => :primary_interface, :on => :ip, :complete_value => true
       scoped_search :relation => :interfaces, :on => :ip, :complete_value => true, :rename => :has_ip, :only_explicit => true
+      scoped_search :relation => :primary_interface, :on => :ip6, :complete_value => true
+      scoped_search :relation => :interfaces, :on => :ip6, :complete_value => true, :rename => :has_ip6, :only_explicit => true
       scoped_search :relation => :interfaces, :on => :mac, :complete_value => true, :rename => :has_mac, :only_explicit => true
 
       scoped_search :relation => :fact_values, :on => :value, :in_key => :fact_names, :on_key => :name, :rename => :facts, :complete_value => true, :only_explicit => true, :ext_method => :search_cast_facts
@@ -81,23 +83,22 @@ module Hostext
       scoped_search :relation => :reported_data, :on => :sockets, :rename => 'reported.sockets', :only_explicit => true
       scoped_search :relation => :reported_data, :on => :cores, :rename => 'reported.cores', :only_explicit => true
       scoped_search :relation => :reported_data, :on => :disks_total, :rename => 'reported.disks_total', :only_explicit => true
+      scoped_search :relation => :reported_data, :on => :kernel_version, :rename => 'reported.kernel_version', :only_explicit => true
 
       scoped_search :relation => :location, :on => :title, :rename => :location, :complete_value => true, :only_explicit => true
       scoped_search :on => :location_id, :complete_enabled => false, :only_explicit => true, :validator => ScopedSearch::Validators::INTEGER
       scoped_search :relation => :organization, :on => :title, :rename => :organization, :complete_value => true, :only_explicit => true
       scoped_search :on => :organization_id, :complete_enabled => false, :only_explicit => true, :validator => ScopedSearch::Validators::INTEGER
 
-      if SETTINGS[:unattended]
-        scoped_search :relation => :subnet,          :on => :network,     :complete_value => false, :rename => :subnet
-        scoped_search :relation => :subnet,          :on => :name,        :complete_value => false, :rename => 'subnet.name'
-        scoped_search :relation => :subnet6,         :on => :network,     :complete_value => false, :rename => :subnet6
-        scoped_search :relation => :subnet6,         :on => :name,        :complete_value => false, :rename => 'subnet6.name'
-        scoped_search :on => :uuid,                                       :complete_value => true
-        scoped_search :on => :build,                                      :complete_value => {:true => true, :false => false}
-        scoped_search :on => :installed_at,                               :complete_value => true, :only_explicit => true
+      scoped_search :relation => :subnet,          :on => :network,     :complete_value => false, :rename => :subnet
+      scoped_search :relation => :subnet,          :on => :name,        :complete_value => false, :rename => 'subnet.name'
+      scoped_search :relation => :subnet6,         :on => :network,     :complete_value => false, :rename => :subnet6
+      scoped_search :relation => :subnet6,         :on => :name,        :complete_value => false, :rename => 'subnet6.name'
+      scoped_search :on => :uuid,                                       :complete_value => true
+      scoped_search :on => :build,                                      :complete_value => {:true => true, :false => false}
+      scoped_search :on => :installed_at,                               :complete_value => true, :only_explicit => true
 
-        scoped_search :relation => :provision_interface, :on => :mac, :complete_value => true
-      end
+      scoped_search :relation => :provision_interface, :on => :mac, :complete_value => true
 
       scoped_search :relation => :search_users, :on => :login,     :complete_value => true, :only_explicit => true, :rename => :'user.login', :operators => ['= ', '~ '], :ext_method => :search_by_user, :aliases => [:owner]
       scoped_search :relation => :search_users, :on => :firstname, :complete_value => true, :only_explicit => true, :rename => :'user.firstname', :operators => ['= ', '~ '], :ext_method => :search_by_user
@@ -184,10 +185,11 @@ module Hostext
 
       def search_by_proxy(key, operator, value)
         proxy_cond = sanitize_sql_for_conditions(["smart_proxies.name #{operator} ?", value_to_sql(operator, value)])
+        joins_cond = sanitize_sql("LEFT JOIN smart_proxies ON smart_proxies.id IN (#{proxy_column_list})")
         host_ids = Host::Managed.reorder('')
                                 .authorized(:view_hosts, Host)
                                 .eager_load(proxy_join_tables)
-                                .joins("LEFT JOIN smart_proxies ON smart_proxies.id IN (#{proxy_column_list})")
+                                .joins(joins_cond)
                                 .where(proxy_cond)
                                 .distinct
                                 .pluck('hosts.id')
@@ -206,7 +208,12 @@ module Hostext
       end
 
       def search_by_os_major(key, operator, value)
-        condition = sanitize_sql_for_conditions(["CAST(major AS DECIMAL) #{operator} ?", value_to_sql(operator, value.to_f)])
+        column, value = if operator =~ /LIKE/
+                          ['major', value]
+                        else
+                          ['CAST(major AS DECIMAL)', value.to_f]
+                        end
+        condition = sanitize_sql_for_conditions(["#{column} #{operator} ?", value_to_sql(operator, value)])
         operatingsystem_ids = Operatingsystem.select(:id).where(condition).pluck('operatingsystems.id').join(',')
         operatingsystem_ids = '-1' if operatingsystem_ids.empty?
         {:conditions => "hosts.operatingsystem_id IN (#{operatingsystem_ids})"}
@@ -221,12 +228,13 @@ module Hostext
           os_z ||= 0
           operator_addition1 = (operator.length == 1) ? "=" : ""
           operator_addition2 = (operator == "=") ? "=" : ""
-          if os_y.to_i.public_send(operator + operator_addition1, y.to_i)
-            if os_y == y
-              if os_z.to_i.public_send(operator + operator_addition2, z.to_i)
-                operatingsystem_ids.append(os.id)
-              end
-            else
+          operator = '!=' if operator == '<>'
+          if operator =~ /ILIKE/
+            match = os.minor =~ /#{value}/
+            match = !match if operator.start_with?('NOT')
+            operatingsystem_ids.append(os.id) if match
+          elsif os_y.to_i.public_send(operator + operator_addition1, y.to_i)
+            if os_y != y || os_z.to_i.public_send(operator + operator_addition2, z.to_i)
               operatingsystem_ids.append(os.id)
             end
           end

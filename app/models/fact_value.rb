@@ -2,7 +2,7 @@ class FactValue < ApplicationRecord
   include Authorizable
   include ScopedSearchExtensions
 
-  belongs_to :host, {:class_name => "Host::Base", :foreign_key => :host_id}
+  belongs_to :host, :class_name => "Host::Base", :foreign_key => :host_id
   belongs_to :fact_name
   delegate :name, :short_name, :compose, :origin, :icon_path, :to => :fact_name
   has_many :hostgroup, :through => :host
@@ -86,17 +86,6 @@ class FactValue < ApplicationRecord
       output << {:label => label, :data => v } unless v == 0
     end
     output
-  end
-
-  def self.build_facts_hash(facts)
-    hosts = Host.where(:id => facts.group_by(&:host_id).keys).all
-
-    hash = {}
-    facts.each do |fact|
-      hash[hosts.detect { |h| h.id == fact.host_id }.to_s] ||= {}
-      hash[hosts.detect { |h| h.id == fact.host_id }.to_s].update({fact.name.to_s => fact.value})
-    end
-    hash
   end
 
   # converts all strings with units (such as 1 MB) to GB scale and Sum them

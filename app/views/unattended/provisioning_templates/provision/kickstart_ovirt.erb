@@ -76,10 +76,14 @@ reboot
 
 %post --log=/root/ks.post.log --erroronfail
 nodectl init
+
 <%= snippet '3.1-stable-lcsb-redhat_register' %>
 <%= snippet '3.1-stable-lcsb-kickstart_networking_setup' %>
 <%= snippet '3.1-stable-lcsb-efibootmgr_netboot' %>
+<% if host_param_true?('host_registration_insights') -%>
 <%= snippet '3.1-stable-lcsb-insights' -%>
+<% end -%>
+
 /usr/sbin/ntpdate -sub <%= host_param('ntp-server') || '0.fedora.pool.ntp.org' %>
 /usr/sbin/hwclock --systohc
 

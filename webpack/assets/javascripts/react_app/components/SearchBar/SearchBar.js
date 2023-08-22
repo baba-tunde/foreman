@@ -15,6 +15,7 @@ const SearchBar = props => {
     onSearch,
     initialQuery,
     onBookmarkClick,
+    setAutocompleteSearchQuery,
   } = props;
 
   return (
@@ -29,6 +30,7 @@ const SearchBar = props => {
           controller={controller}
         />
         <Button
+          ouiaId="autocomplete-search-button"
           id="btn-search"
           variant="control"
           aria-label="search button for search input"
@@ -39,7 +41,10 @@ const SearchBar = props => {
         </Button>
         {!isEmpty(bookmarks) && (
           <Bookmarks
-            onBookmarkClick={onBookmarkClick}
+            onBookmarkClick={query => {
+              onBookmarkClick(query);
+              setAutocompleteSearchQuery(query, autocomplete.id);
+            }}
             controller={controller}
             searchQuery={searchQuery}
             {...bookmarks}
@@ -66,6 +71,7 @@ SearchBar.propTypes = {
     controller: PropTypes.string,
     bookmarks: PropTypes.object,
   }),
+  setAutocompleteSearchQuery: PropTypes.func.isRequired,
 };
 
 SearchBar.defaultProps = {

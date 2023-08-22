@@ -212,6 +212,7 @@ Foreman::Application.routes.draw do
           resources :table_preferences, :only => [:index, :create, :destroy, :show, :update]
           resources :mail_notifications, :only => [:create, :destroy, :update]
           get 'mail_notifications', :to => 'mail_notifications#user_mail_notifications', :on => :member
+          get 'extlogin', :to => 'users#extlogin', :on => :collection
         end
       end
 
@@ -292,6 +293,7 @@ Foreman::Application.routes.draw do
           put :refresh, :on => :member
           get :version, :on => :member
           get :logs, :on => :member
+          post :import_subnets, :on => :member
           resources :autosign, :only => [:index, :create, :destroy]
           resources :hosts, :only => [:update, :index, :destroy], :controller => 'smart_proxy_hosts'
         end
@@ -300,6 +302,7 @@ Foreman::Application.routes.draw do
           get 'status/:type', :on => :member, :action => :get_status
           get :vm_compute_attributes, :on => :member
           get 'template/:kind', :on => :member, :action => :template
+          get :templates, :on => :member
           put :disassociate, :on => :member
           delete 'status/:type', :on => :member, :action => :forget_status
           put :boot, :on => :member

@@ -37,8 +37,16 @@ class SettingRegistry
     @settings.any?
   end
 
+  def loaded?
+    !!@values_loaded_at
+  end
+
   def logger
     Foreman::Logging.logger('app')
+  end
+
+  def select_collection_registry
+    @select_collection_registry ||= SettingSelectCollection.new
   end
 
   def find(name)
@@ -72,17 +80,16 @@ class SettingRegistry
     definition = find(name)
     raise ActiveRecord::RecordNotFound.new(_("Setting definition for '%s' not found, can not set") % name, Setting, name) unless definition
     db_record = _find_or_new_db_record(name)
-    db_record.send(:set_setting_type_from_value)
 
     type = value.class.to_s.downcase
     type = 'boolean' if type == "trueclass" || type == "falseclass"
     case type
     when 'string'
       db_record.parse_string_value(value)
-    when db_record.settings_type
+    when definition.settings_type
       db_record.value = value
     else
-      raise ::Foreman::Exception.new(N_('expected a value of type %s'), @setting.settings_type)
+      raise ::Foreman::SettingValueException.new(N_('expected a value of type %s'), definition.settings_type)
     end
     db_record
   end
@@ -104,38 +111,24 @@ class SettingRegistry
   def load
     # add() all setting definitions
     load_definitions
+    Setting.descendants.each(&:load_defaults)
 
     # load all db values
     load_values(ignore_cache: true)
 
     # create missing settings in the database
     @settings.except(*Setting.unscoped.all.pluck(:name)).each do |name, definition|
-      # Creating missing records as we operate over the DB model while updating the setting
-      _new_db_record(definition).save(validate: false)
       definition.updated_at = nil
-      definition.value ||= definition.default
     end
   end
 
   def load_definitions
     @settings = {}
     @categories = nil
-
-    Setting.descendants.each do |cat_cls|
-      if cat_cls.default_settings.empty?
-        next unless (Setting.table_exists? rescue(false))
-        # Setting category uses really old way of doing things
-        _load_category_from_db(cat_cls)
-      else
-        cat_cls.default_settings.each do |s|
-          t = Setting.setting_type_from_value(s[:default]) || 'string'
-          _add(s[:name], s.except(:name).merge(type: t.to_sym, category: cat_cls.name, context: :deprecated))
-        end
-      end
-    end
+    @select_collection_registry = nil
 
     Foreman::SettingManager.settings.each do |name, opts|
-      _add(name, opts)
+      _add(name, **opts)
     end
   end
 
@@ -158,14 +151,14 @@ class SettingRegistry
         next
       end
       definition.updated_at = s.updated_at
-      definition.value = s.value
+      definition.value_from_db = s.value
       logger.debug("Updated cached value for setting=#{s.name}") unless ignore_cache
     end
     @values_loaded_at = Time.zone.now if settings.any?
   end
 
   def _add(name, category:, type:, default:, description:, full_name:, context:, value: nil, encrypted: false, collection: nil, options: {})
-    Setting.select_collection_registry.add(name, collection: collection, **options) if collection
+    select_collection_registry.add(name, collection: collection, **options) if collection
     Foreman::Deprecation.deprecation_warning('3.3', "initial value of setting '#{name}' should be created in a migration") if value
 
     @settings[name.to_s] = SettingPresenter.new({ name: name,
@@ -187,18 +180,7 @@ class SettingRegistry
 
   def _new_db_record(definition)
     Setting.new(name: definition.name,
-                category: definition.category.safe_constantize&.name || 'Setting',
-                default: definition.default,
                 value: definition.value,
-                description: definition.description)
-  end
-
-  # ==== Load old defaults
-
-  def _load_category_from_db(category_klass)
-    category_klass.all.each do |set|
-      # set.value can be user value, we have no way of telling the initial value
-      _add(set.name, type: (set.settings_type || 'string').to_sym, category: category_klass.name, description: set.description, default: set.default, full_name: set.try(:full_name), context: :deprecated, encrypted: set.try(:encrypted))
-    end
+                category: definition.category.safe_constantize&.name || 'Setting')
   end
 end

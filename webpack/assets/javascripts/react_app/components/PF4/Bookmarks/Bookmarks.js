@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle } from '@patternfly/react-core';
 import { OutlinedBookmarkIcon } from '@patternfly/react-icons';
-import BookmarkModal from '../../Bookmarks/components/SearchModal';
+import BookmarkModal from '../../BookmarkForm/SearchModal';
 import { STATUS } from '../../../constants';
 import { noop } from '../../../common/helpers';
 import {
@@ -15,6 +15,7 @@ import { stringifyParams } from '../../../common/urlHelpers';
 import { translate as __ } from '../../../common/I18n';
 
 const Bookmarks = ({
+  id,
   bookmarks,
   status,
   url,
@@ -42,35 +43,39 @@ const Bookmarks = ({
   };
 
   const dropdownItems = [
-    addBookmarkItem({ canCreate, setModalOpen }),
+    canCreate && addBookmarkItem({ setModalOpen }),
     savedBookmarksItems({
       bookmarks,
       onBookmarkClick,
       status,
       errors,
     }),
-    manageBookmarksItem({
-      canCreate,
-      onClick: manageBookmarks,
-      documentationUrl,
-    }),
-  ];
+    canCreate &&
+      manageBookmarksItem({
+        onClick: manageBookmarks,
+        documentationUrl,
+      }),
+  ].filter(i => i);
 
   return (
     <React.Fragment>
       <BookmarkModal
+        id={id}
         controller={controller}
         url={url}
         setModalClosed={setModalClosed}
         bookmarks={bookmarks}
       />
       <Dropdown
+        ouiaId="bookmarks-dropdown"
         isOpen={isDropdownOpen}
+        onSelect={() => setIsDropdownOpen(false)}
         toggle={
           <DropdownToggle
             onToggle={onToggle}
             title={__('Bookmarks')}
             aria-label="bookmarks dropdown toggle"
+            ouiaId="bookmarks-dropdown-toggle"
           >
             <OutlinedBookmarkIcon />
           </DropdownToggle>
@@ -84,6 +89,7 @@ const Bookmarks = ({
 };
 
 Bookmarks.propTypes = {
+  id: PropTypes.string.isRequired,
   controller: PropTypes.string.isRequired,
   onBookmarkClick: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,

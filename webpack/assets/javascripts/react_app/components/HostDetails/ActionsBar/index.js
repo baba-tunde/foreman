@@ -7,12 +7,13 @@ import {
   Dropdown,
   DropdownSeparator,
   KebabToggle,
+  Split,
+  SplitItem,
 } from '@patternfly/react-core';
 import {
   DatabaseIcon,
   TrashIcon,
   CloneIcon,
-  CommentIcon,
   UndoIcon,
   FileInvoiceIcon,
   BuildIcon,
@@ -25,9 +26,12 @@ import { foremanUrl } from '../../../common/helpers';
 import { cancelBuild, deleteHost, isHostTurnOn } from './actions';
 import { useForemanSettings } from '../../../Root/Context/ForemanContext';
 import BuildModal from './BuildModal';
+import Slot from '../../common/Slot';
 
 const ActionsBar = ({
   hostId,
+  hostFriendlyId,
+  hostName,
   computeId,
   isBuild,
   hasReports,
@@ -47,7 +51,7 @@ const ActionsBar = ({
 
   const dispatch = useDispatch();
   const deleteHostHandler = () =>
-    dispatch(deleteHost(hostId, computeId, destroyVmOnHostDelete));
+    dispatch(deleteHost(hostName, computeId, destroyVmOnHostDelete));
 
   const buildHandler = () => {
     if (isBuild) {
@@ -59,6 +63,7 @@ const ActionsBar = ({
   };
   const dropdownItems = [
     <DropdownItem
+      ouiaId="build-dropdown-item"
       onClick={buildHandler}
       key="build"
       component="button"
@@ -68,8 +73,9 @@ const ActionsBar = ({
       {isBuild ? __('Cancel build') : __('Build')}
     </DropdownItem>,
     <DropdownItem
+      ouiaId="clone-dropdown-item"
       isDisabled={!canCreate}
-      onClick={() => visit(foremanUrl(`/hosts/${hostId}/clone`))}
+      onClick={() => visit(foremanUrl(`/hosts/${hostFriendlyId}/clone`))}
       key="clone"
       component="button"
       icon={<CloneIcon />}
@@ -77,6 +83,7 @@ const ActionsBar = ({
       {__('Clone')}
     </DropdownItem>,
     <DropdownItem
+      ouiaId="delete-dropdown-item"
       isDisabled={!canDestroy}
       onClick={deleteHostHandler}
       key="delete"
@@ -85,9 +92,10 @@ const ActionsBar = ({
     >
       {__('Delete')}
     </DropdownItem>,
-    <DropdownSeparator key="sp-1" />,
+    <DropdownSeparator key="sp-1" ouiaId="dropdown-separator-1" />,
     <DropdownItem
-      onClick={() => visit(foremanUrl(`/hosts/${hostId}/console`))}
+      ouiaId="console-dropdown-item"
+      onClick={() => visit(foremanUrl(`/hosts/${hostFriendlyId}/console`))}
       key="console"
       isDisabled={!isHostActive}
       component="button"
@@ -96,7 +104,8 @@ const ActionsBar = ({
       {__('Console')}
     </DropdownItem>,
     <DropdownItem
-      onClick={() => visit(foremanUrl(`/hosts/${hostId}/facts`))}
+      ouiaId="fact-dropdown-item"
+      onClick={() => visit(foremanUrl(`/hosts/${hostFriendlyId}/facts`))}
       key="fact"
       component="button"
       icon={<DatabaseIcon />}
@@ -104,58 +113,61 @@ const ActionsBar = ({
       {__('Facts')}
     </DropdownItem>,
     <DropdownItem
+      ouiaId="report-dropdown-item"
       isDisabled={!hasReports}
-      onClick={() => visit(foremanUrl(`/hosts/${hostId}/config_reports`))}
+      onClick={() =>
+        visit(foremanUrl(`/hosts/${hostFriendlyId}/config_reports`))
+      }
       key="report"
       component="button"
       icon={<FileInvoiceIcon />}
     >
       {__('Reports')}
     </DropdownItem>,
-    <DropdownSeparator key="sp-2" />,
+    <DropdownSeparator key="sp-2" ouiaId="dropdown-separator-2" />,
     <DropdownItem
+      ouiaId="pre-version-dropdown-item"
       icon={<UndoIcon />}
-      href={`/hosts/${hostId}`}
+      href={`/hosts/${hostFriendlyId}`}
       key="prev-version"
     >
       {__('Legacy UI')}
-    </DropdownItem>,
-    <DropdownItem
-      icon={<CommentIcon />}
-      onClick={() =>
-        window.open(
-          'https://community.theforeman.org/t/foreman-3-0-new-host-detail-page-feedback/25281',
-          '_blank'
-        )
-      }
-      key="feedback"
-      component="button"
-    >
-      {__('Share feedback')}
     </DropdownItem>,
   ];
 
   return (
     <>
-      <Button
-        onClick={() => visit(foremanUrl(`/hosts/${hostId}/edit`))}
-        variant="secondary"
-        isDisabled={!canEdit}
-      >
-        {__('Edit')}
-      </Button>
-      <Dropdown
-        alignments={{ default: 'right' }}
-        toggle={<KebabToggle id="hostdetails-kebab" onToggle={onKebabToggle} />}
-        isOpen={kebabIsOpen}
-        isPlain
-        dropdownItems={dropdownItems.concat(registeredItems)}
-      />
+      <Split hasGutter>
+        <SplitItem>
+          <Slot hostId={hostId} hostName={hostName} id="_rex-host-features" />
+        </SplitItem>
+        <SplitItem>
+          <Button
+            ouiaId="host-edit-button"
+            onClick={() => visit(foremanUrl(`/hosts/${hostFriendlyId}/edit`))}
+            variant="secondary"
+            isDisabled={!canEdit}
+          >
+            {__('Edit')}
+          </Button>
+          <Dropdown
+            ouiaId="kebab-dropdown"
+            alignments={{ default: 'right' }}
+            toggle={
+              <KebabToggle id="hostdetails-kebab" onToggle={onKebabToggle} />
+            }
+            isOpen={kebabIsOpen}
+            isPlain
+            dropdownItems={dropdownItems.concat(registeredItems)}
+          />
+        </SplitItem>
+      </Split>
       {isBuildModalOpen && (
         <BuildModal
           isModalOpen={isBuildModalOpen}
           onClose={() => setBuildModal(false)}
-          hostId={hostId}
+          hostFriendlyId={hostFriendlyId}
+          hostName={hostName}
         />
       )}
     </>
@@ -163,7 +175,9 @@ const ActionsBar = ({
 };
 
 ActionsBar.propTypes = {
-  hostId: PropTypes.string,
+  hostId: PropTypes.number,
+  hostFriendlyId: PropTypes.string,
+  hostName: PropTypes.string,
   computeId: PropTypes.number,
   permissions: PropTypes.object,
   hasReports: PropTypes.bool,
@@ -171,6 +185,8 @@ ActionsBar.propTypes = {
 };
 ActionsBar.defaultProps = {
   hostId: undefined,
+  hostFriendlyId: undefined,
+  hostName: undefined,
   computeId: undefined,
   permissions: {
     destroy_hosts: false,

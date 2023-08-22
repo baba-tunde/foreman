@@ -5,6 +5,7 @@ model: ProvisioningTemplate
 oses:
 - AlmaLinux
 - CentOS
+- CentOS_Stream
 - Fedora
 - RedHat
 - Rocky
@@ -14,6 +15,7 @@ test_on:
 - host4and6dhcp
 - host4static
 - host6static
+- rhel9_dhcp
 description: |
   The provisioning template for kickstart based distributions. The output is fetched by Anaconda installer during
   the network based installation. To customize the installation, modify the host parameters.
@@ -30,6 +32,8 @@ description: |
   - enable-puppetlabs-repo: boolean (default=false)
   - enable-puppetlabs-puppet5-repo: boolean (default=false)
   - enable-puppetlabs-puppet6-repo: boolean (default=false)
+  - enable-official-puppet7-repo: boolean (default=false)
+  - skip-puppet-setup: boolean (default=false)
   - salt_master: string (default=undef)
   - ntp-server: string (default=undef)
   - bootloader-append: string (default="nofb quiet splash=quiet")
@@ -39,14 +43,14 @@ description: |
   - use-ntp: boolean (default depends on OS release)
   - fips_enabled: boolean (default=false)
   - encrypt_grub: boolean (default=false)
+  - use_graphical_installer: boolean (default=false)
+  - enable-remote-execution-pull: boolean (default=false)
 
   Reference links:
   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-options
   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax
   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user
 -%>
-# This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
-
 <%
   rhel_compatible = @host.operatingsystem.family == 'Redhat' && @host.operatingsystem.name != 'Fedora'
   is_fedora = @host.operatingsystem.name == 'Fedora'
@@ -56,7 +60,7 @@ description: |
   # safemode renderer does not support unary negation
   proxy_uri = host_param('http-proxy') ? "http://#{host_param('http-proxy')}:#{host_param('http-proxy-port')}" : nil
   proxy_string = proxy_uri ? " --proxy=#{proxy_uri}" : ''
-  puppet_enabled = host_puppet_server.present? || host_param_true?('force-puppet')
+  puppet_enabled = !host_param_true?('skip-puppet-setup') && (host_puppet_server.present? || host_param_true?('force-puppet'))
   salt_enabled = host_param('salt_master') ? true : false
   chef_enabled = @host.respond_to?(:chef_proxy) && @host.chef_proxy
   section_end = (rhel_compatible && os_major <= 5) ? '' : '%end'
@@ -64,6 +68,17 @@ description: |
   iface = @host.provision_interface
   appstream_present = false
 -%>
+# This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
+# for <%= @host %> running <%= @host.operatingsystem.name %> <%= os_major %> <%= @arch %>
+# Organization: <%= @host.organization %>
+# Location: <%= @host.location %>
+<%
+if plugin_present?('katello')
+-%>
+# Lifecycle environment: <%= @host.lifecycle_environment %>
+# Content View: <%= @host.content_view %>
+# Content Source: <%= @host.content_source %>
+<% end -%>
 
 <% if (is_fedora && os_major < 29) || (rhel_compatible && os_major <= 7) -%>
 install
@@ -92,7 +107,6 @@ repo --name <%= medium[:name] %> --baseurl <%= medium[:url] %> <%= medium[:insta
 lang <%= host_param('lang') || 'en_US.UTF-8' %>
 selinux --<%= host_param('selinux-mode') || host_param('selinux') || 'enforcing' %>
 keyboard <%= host_param('keyboard') || 'us' %>
-skipx
 
 <%
   network_options = []
@@ -217,14 +231,22 @@ key --skip
 <% else -%>
 <%= @host.diskLayout %>
 <% end -%>
+<%= snippet('kickstart_rhsm') if rhel_compatible && os_major >= 9 -%>
 
+<% if host_param_true?('use_graphical_installer') -%>
+graphical
+<% else -%>
+skipx
 text
-reboot
+<% end -%>
+reboot<% if host_param_true?('install_reboot_kexec') %> --kexec<% end %>
 
 %packages
 <%= snippet_if_exists(template_name + " custom packages") %>
 yum
+<% if os_major < 8 -%>
 dhclient
+<% end -%>
 <% if use_ntp -%>
 ntp
 -chrony
@@ -281,7 +303,7 @@ logger "Starting anaconda <%= @host %> postinstall"
 <%= snippet '3.1-stable-lcsb-epel' -%>
 <% end -%>
 
-<%= snippet '3.1-stable-lcsb-redhat_register' %>
+<%= snippet '3.1-stable-lcsb-redhat_register' if rhel_compatible && os_major < 9 -%>
 
 <% if host_enc['parameters']['realm'] && @host.realm && (@host.realm.realm_type == 'FreeIPA' || @host.realm.realm_type == 'Red Hat Identity Management') -%>
 <%= snippet '3.1-stable-lcsb-freeipa_register' %>
@@ -298,6 +320,12 @@ fi
 
 <%= snippet('remote_execution_ssh_keys') %>
 
+<% if plugin_present?('katello') && host_param_true?('enable-remote-execution-pull') -%>
+<%= save_to_file('/root/remote_execution_pull_setup.sh', snippet('remote_execution_pull_setup'), verbatim: true) %>
+chmod +x /root/remote_execution_pull_setup.sh
+/root/remote_execution_pull_setup.sh
+<% end -%>
+
 <%= snippet "blacklist_kernel_modules" %>
 
 <% if chef_enabled %>
@@ -306,6 +334,7 @@ fi
 
 <% if puppet_enabled %>
 <% if host_param_true?('enable-puppetlabs-repo') || host_param_true?('enable-official-puppet7-repo') || host_param_true?('enable-puppetlabs-puppet6-repo')|| host_param_true?('enable-puppetlabs-puppet5-repo') -%>
+
 <%= snippet '3.1-stable-lcsb-puppetlabs_repo' %>
 <% end -%>
 <%= snippet '3.1-stable-lcsb-puppet_setup' %>
@@ -327,7 +356,8 @@ sed -e 's/DEFAULTKERNEL=kernel-uek/DEFAULTKERNEL=kernel/g' -i /etc/sysconfig/ker
 
 <%= snippet_if_exists(template_name + " custom post") %>
 
-<%= snippet '3.1-stable-lcsb-insights' -%>
+<%= snippet '3.1-stable-lcsb-insights' if host_param_true?('host_registration_insights') && os_major < 9 -%>
+
 touch /tmp/foreman_built
 
 chvt 1

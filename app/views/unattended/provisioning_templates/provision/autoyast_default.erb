@@ -9,7 +9,7 @@ description: |
 -%>
 <%
   # safemode renderer does not support unary negation
-  puppet_enabled = host_puppet_server.present? || host_param_true?('force-puppet')
+  puppet_enabled = !host_param_true?('skip-puppet-setup') && (host_puppet_server.present? || host_param_true?('force-puppet'))
   salt_enabled = host_param('salt_master') ? true : false
   os_major = @host.operatingsystem.major.to_i
   primary_interface_identifier = @host.primary_interface.identifier.blank? ? 'eth0' : @host.primary_interface.identifier
@@ -187,6 +187,8 @@ cp /etc/resolv.conf /mnt/etc
         <source><![CDATA[
 /bin/hostname <%= @host.name %>
 
+<%= snippet_if_exists(template_name + " custom pre") -%>
+
 <%= snippet('remote_execution_ssh_keys') %>
 
 <%= snippet "blacklist_kernel_modules" %>
@@ -198,6 +200,8 @@ cp /etc/resolv.conf /mnt/etc
 <% if salt_enabled %>
 <%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
+
+<%= snippet_if_exists(template_name + " custom post") -%>
 
 <%= snippet '3.1-stable-lcsb-eject_cdrom' -%>
 <%= snippet '3.1-stable-lcsb-built' -%>

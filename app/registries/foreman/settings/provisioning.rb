@@ -1,3 +1,5 @@
+require 'foreman/provision'
+
 Foreman::SettingManager.define(:foreman) do
   category(:provisioning, N_('Provisioning')) do
     owner_select = proc do
@@ -18,6 +20,8 @@ Foreman::SettingManager.define(:foreman) do
       default: nil,
       full_name: N_('Root password'),
       encrypted: true)
+    validates('root_pass', { length: { minimum: 8 }, allow_blank: true })
+
     setting('unattended_url',
       type: :string,
       description: N_("URL hosts will retrieve templates from during build, when it starts with https unattended/userdata controllers cannot be accessed via HTTP"),
@@ -86,7 +90,7 @@ Foreman::SettingManager.define(:foreman) do
       full_name: N_("Default PXE global template entry"))
     setting('default_pxe_item_local',
       type: :string,
-      description: N_("Default PXE menu item in local template - 'local', 'local_chain_hd0' or custom, use blank for template default"),
+      description: N_("Default PXE menu item in local template - 'local', 'force_local_chain_hd0' or custom, use blank for template default"),
       default: nil,
       full_name: N_("Default PXE local template entry"))
     setting('intermediate_ipxe_script',
@@ -115,29 +119,37 @@ Foreman::SettingManager.define(:foreman) do
       description: N_("Default 'Host initial configuration' template, automatically assigned when a new operating system is created"),
       default: 'Linux host_init_config default',
       full_name: N_("Default 'Host initial configuration' template"))
+    setting('ct_command',
+      type: :array,
+      description: N_("Full path to CoreOS transpiler (ct) with arguments as an comma-separated array"),
+      default: [which('ct'), '--pretty', '--files-dir', Rails.root.join('config', 'ct').to_s],
+      full_name: N_("CoreOS Transpiler Command"))
+    setting('fcct_command',
+      type: :array,
+      description: N_("Full path to Fedora CoreOS transpiler (fcct) with arguments as an comma-separated array"),
+      default: [which('fcct'), '--pretty', '--files-dir', Rails.root.join('config', 'ct').to_s],
+      full_name: N_("Fedora CoreOS Transpiler Command"))
 
     # We have following loop twice to keep the historical order.
     # TODO: First resolve the correct order and then optimize this loop.
-    TemplateKind::PXE.each do |pxe_kind|
+    Foreman::Provision::PXE_TEMPLATE_KINDS.each do |pxe_kind|
       setting("global_#{pxe_kind}",
         type: :string,
         description: N_("Global default %s template. This template gets deployed to all configured TFTP servers. It will not be affected by upgrades.") % pxe_kind,
-        default: ProvisioningTemplate.global_default_name(pxe_kind),
+        default: Foreman::Provision.global_default_name(pxe_kind),
         full_name: N_("Global default %s template") % pxe_kind,
         collection: proc { Hash[ProvisioningTemplate.unscoped.of_kind(pxe_kind).pluck(:name).map { |name| [name, name] }] },
-        validates: :pxe_template_name)
+        validate: :pxe_template_name)
     end
-    TemplateKind::PXE.each do |pxe_kind|
+    Foreman::Provision::PXE_TEMPLATE_KINDS.each do |pxe_kind|
       setting("local_boot_#{pxe_kind}",
         type: :string,
         description: N_("Template that will be selected as %s default for local boot.") % pxe_kind,
-        default: ProvisioningTemplate.local_boot_name(pxe_kind),
+        default: Foreman::Provision.local_boot_default_name(pxe_kind),
         full_name: N_("Local boot %s template") % pxe_kind,
         collection: proc { Hash[ProvisioningTemplate.unscoped.of_kind(pxe_kind).pluck(:name).map { |name| [name, name] }] },
-        validates: :pxe_template_name)
+        validate: :pxe_template_name)
     end
-
-    validates 'safemode_render', ->(value) { value || Setting[:bmc_credentials_accessible] }, message: N_("Unable to disable safemode_render when bmc_credentials_accessible is disabled")
   end
 end
 

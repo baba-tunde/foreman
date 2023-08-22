@@ -1,79 +1,1326 @@
-2022-01-26	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
-	* Release 3.1.1
+2023-04-17	ianballou <ianballou67@gmail.com>
+	* Release 3.5.3
+
+2023-04-14	Dan R. K. Ports <dan@drkp.net>
+	* Refs #35578: preseed_netplan_generic_interface with DHCP interface
+
+2023-03-29	vijaysawant <vijaysawant36@gmail.com>
+	* Fixes #36225 - fix Host Details path in config report
+
+2023-03-21	Ron Lavi <1ronlavi@gmail.com>
+	* Fixes #35949 - move select_multiple_puppet_proxy to the puppet plugin
+
+2023-03-14	nofaralfasi <nalfassi@redhat.com>
+	* Fixes #35990 - fix search fact_values via API
+
+2023-03-13	Eric D. Helms <ericdhelms@gmail.com>
+	* Release 3.5.2
+
+2023-03-12	Adam Ruzicka <aruzicka@redhat.com>
+	* Refs #34305 - Fix load_values test
+	* Fixes #35894 - Properly detect setting changes
+	* Fixes #35866 - Make RSS notification expire after 1 month
+
+2023-03-12	Karolina Malyjurkova <kmalyjur@redhat.com>
+	* Fixes #35762 - No host error after editing host's interfaces
+
+2023-03-12	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #36019 - Pass URL params to foreman_url as hash
+
+2023-03-12	Markus Bucher <bucher@atix.de>
+	* Fixes #35946 - windows pass-crypt modifies input
+
+2023-03-12	nofar <nalfassi@redhat.com>
+	* Fixes #35876 - Add tag_type parameter to replace_value_control
+
+2023-03-12	Johann Grabmann <1290836+jograb@users.noreply.github.com>
+	* Refs #34975 - fix kickstart_kernel_options.erb escaping
+
+2023-03-10	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #36153 - host_puppet_environment ignores host param
+
+2023-02-28	MariaAga <mariaaga@redhat.com>
+	* Fixes #35839 - Move Details tab out of experimental labs
+
+2023-01-31	Evgeni Golov <evgeni@golov.de>
+	* Refs #35593 - call dnf upgrade to keep the container uptodate
+
+2023-01-28	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35593 - Use CentOS 8 Stream for container
+
+2023-01-27	Markus Bucher <bucher@atix.de>
+	* Fixes #35977 - html_escape host-comment in index
+
+2023-01-19	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #35893 - Pin to audited 5.0.x
+
+2022-12-16	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Release 3.5.1
+	* i18n - extracting new, pulling from tx
+	* Refs #35862 - Pin to fog-vsphere 3.5.x
+
+2022-12-16	Ondrej Ezr <oezr@redhat.com>
+	* Fixes #35871 - purge trends only when statistics not installed
+
+2022-12-16	Alexander Olofsson <alexander.olofsson@liu.se>
+	* Fixes #35868 - Stop using Katello unconditionally
+
+2022-12-16	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #35719 - Preseed Autoinstall auto updates
+
+2022-12-16	Evgeni Golov <evgeni@golov.de>
+	* Fixes #35865 - Update future Debian release names and versions
+
+2022-12-16	MariaAga <mariaaga@redhat.com>
+	* Fixes #35819 - Details tab cards have horizontal scroll
+
+2022-12-14	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Release 3.5.0
+	* i18n - extracting new, pulling from tx
+
+2022-12-13	Paul Donohue <git@PaulSD.com>
+	* Fixes #35326 - Rename hostname/fqdn ENC vars to avoid conflicts
+
+2022-12-13	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35836 - Drop "BIOS" UUID field
+	* Refs #35796 - Reduce empty lines
+
+2022-12-13	tux93 <tux93@users.noreply.github.com>
+	* Fixes #35796 - Allow overriding default kernel parameters (#9525)
+
+2022-12-13	Bernhard Suttner <suttner@atix.de>
+	* Fixes #35674 - Add more custom pre/post snippet hooks
+
+2022-12-13	Samir Jha <sjha4@ncsu.edu>
+	* Fixes #35816 - ISE when passing org_id as an array
+
+2022-12-13	pkoprda <peto.koprda@gmail.com>
+	* Fixes #35757 - Same columns should have the same status
+
+2022-12-13	MariaAga <mariaaga@redhat.com>
+	* Fixes #35744 - Date components are not translated
+
+2022-12-13	Elkin Aguas <elkinaguas@gmail.com>
+	* Fixes #35648 - Fixes API documentation typo
+
+2022-12-13	Kamil Szubrycht <kamil.szubrycht@ironin.pl>
+	* Refs #32685 - Keep modulized model name in Global ID
+
+2022-11-30	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Release 3.5.0-rc2
+	* i18n - extracting new, pulling from tx
+
+2022-11-28	Sayan Das <saydas@redhat.com>
+	* Refs #35530 - Dont use shellescape on the filename
+
+2022-11-23	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #35578 - Fix netplan interface template syntax (#9515)
+
+2022-11-21	pkoprda <peto.koprda@gmail.com>
+	* Fixes #35733 - Add network category to selectable columns
+	* Fixes #35673 - Do not allow create empty table preference
+
+2022-11-21	Eric D. Helms <ericdhelms@gmail.com>
+	* Fixes #35758 - Allow latest Rails 6.1
+
+2022-11-21	Lucy Fu <lufu@redhat.com>
+	* Fixes #35745 - Add Virtual guests to System properties card
+
+2022-11-21	MariaAga <mariaaga@redhat.com>
+	* Fixes #35751 - Hide Manage columns text in small screens
+
+2022-11-21	Karolina Malyjurkova <kmalyjur@redhat.com>
+	* Fixes #34219 - Add page title to Host Detail
+	* Fixes #35724 - Add page title to Host Statuses
+
+2022-11-08	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Release 3.5.0-rc1
+
+2022-11-07	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35623 - Add reported data profile for hosts index page
+
+2022-11-07	Ian Ballou <ianballou67@gmail.com>
+	* Fixes #35605 - host details tab can be too tall (#9495)
+
+2022-11-07	Maria <mariaaga@redhat.com>
+	* Fixes #35656 - host details Networking interfaces card (#9475)
+
+2022-11-07	Karolina Malyjurkova <kmalyjur@redhat.com>
+	* Fixes #35667 - Add Details tab - BIOS card
+
+2022-11-04	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35088 - Remove GCE Compute resource code
+
+2022-11-04	Marcel Kühlhorn <marcelk@atix.de>
+	* Fixes #35397 - Preseed Autoinstall incorporate host_params
+
+2022-11-04	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* i18n - extracting new, pulling from tx
+
+2022-11-04	Evgeni Golov <evgeni@golov.de>
+	* Fixes #35717 - use caller_locations in deprecation warnings
+
+2022-11-03	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35708 - Avoid multiple %s placeholders in i18n
+	* Refs #35708 - Avoid multiple %s placeholders in i18n
+	* Refs #35708 - Avoid multiple %s placeholders in i18n
+	* Refs #35708 - Avoid string interpolation with translations
+	* Refs #35708 - Avoid string interpolation with translations
+	* Refs #35708 - Avoid string interpolation with translations
+	* Refs #35708 - Fix bad string interpolation example
+
+2022-11-03	MariaAga <mariaaga@redhat.com>
+	* Fixes #35696 - add bios info to reported data facet
+
+2022-11-02	Maria <mariaaga@redhat.com>
+	* Fixes #35702 - Move Card Context to apply all host tabs (#9494)
+
+2022-11-02	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35621 - Make power status a selectable column
+
+2022-11-01	Ian Ballou <ianballou67@gmail.com>
+	* Fixes #29590 - Katello report template for listing host packages (#9487)
+
+2022-11-01	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #35414 - Log an early message on dynflow startup
+	* Refs #35300 - Pass arguments as keyword arguments
+
+2022-10-31	Bernhard Suttner <suttner@atix.de>
+	* Fixes #35583 - Skip dhclient installation
+
+2022-10-31	Stejskal Leos <github@stejskalleos.cz>
+	* Fixes #35626 - Registration & proxy's registration_url
+
+2022-10-31	Maria <mariaaga@redhat.com>
+	* Fixes #34786 - Remove deprecated slot 'details-cards' (#9489)
+
+2022-10-31	Adam Ruzicka <aruzicka@redhat.com>
+	* Fixes #35694 - Add foreman product version macro
+
+2022-10-31	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35473 - Add extlogin API endpoint
+
+2022-10-30	Peter Koprda <47797196+pkoprda@users.noreply.github.com>
+	* Fixes #35287 - Create column selector on host index page (#9323)
+
+2022-10-28	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #35414 - Add sd_notify dependency to service
+
+2022-10-27	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #35376 - Allow additional entries in config.hosts Co-authored-by: Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+
+2022-10-26	kmalyjur <78563507+kmalyjur@users.noreply.github.com>
+	* Fixes #35647 - Update foreman_dev_setup.asciidoc
+
+2022-10-26	MariaAga <mariaaga@redhat.com>
+	* Fixes #35634 - searchbar crashes when no permissions
+
+2022-10-25	Maria <mariaaga@redhat.com>
+	* Fixes #35665 - Host Details add a provisioning card (#9480)
+
+2022-10-25	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35536 - Template input_resource macro & preview error (#9428)
+
+2022-10-25	Evgeni Golov <evgeni@golov.de>
+	* Fixes #35663 - relax jwt pin to accept newer versions than 2.2.z
+
+2022-10-24	nofar <nalfassi@redhat.com>
+	* Refs #35581 - setting a generic pg version
+
+2022-10-21	Evgeni Golov <evgeni@golov.de>
+	* Fixes #35658 - don't fail parsing Windows facts without os_name
+
+2022-10-19	Bernhard Suttner <sbernhard@users.noreply.github.com>
+	* Fixes #35650 - write correct form of deb repo
+
+2022-10-19	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35528 - Remove i386 from host architectures (#9424)
+
+2022-10-17	Karolina Malyjurkova <kmalyjur@redhat.com>
+	* Fixes #35636 - Display host name in delete modal
+
+2022-10-14	Chris Roberts <chrobert@redhat.com>
+	* Fixes #35622 - Add kernel release to new host UI OS card (#9461)
+	* Fixes #35619 - Add kernel_version to reported data facet for new host UI
+
+2022-10-14	Anthony Somerset <anthony@sts.io>
+	* fixes #35578: Netplan fixes for different static cases
+
+2022-10-13	Leos Stejskal <lstejska@redhat.com>
+	* refs #35069 - ApplicationRecord.<=> undefined method 'name'
+
+2022-10-11	Oleh Fedorenko <ofedoren@redhat.com>
+	* Refs #32685 - Use actual model
+
+2022-10-10	Maria <mariaaga@redhat.com>
+	* Fixes #35176 - add review templates to host details (#9434)
+
+2022-10-07	Bernhard Suttner <suttner@atix.de>
+	* Fixes #35569 - set correct icons
+
+2022-10-06	Evgeni Golov <evgeni@golov.de>
+	* update readme to point at discourse, not old google groups
+
+2022-10-06	Lior Keren <lkeren@redhat.com>
+	* Fixes #35581 - dev_setup clearing up instructions
+	* Fixes #35587 - Updating Contributing file with a few links
+
+2022-10-05	Adam Růžička <adamruzicka@users.noreply.github.com>
+	* Fixes #35547 - Include REX pull in kickstart default (#9430)
+
+2022-10-04	Adam Ruzicka <aruzicka@redhat.com>
+	* Refs #35530 - Alternative approach to save_to_file
+
+2022-10-04	Lucy Fu <lufu@redhat.com>
+	* Refs #35436 - Add ouiaId to Edit button on new host detail page
+
+2022-09-30	Adam Ruzicka <aruzicka@redhat.com>
+	* Refs #34949 - Do not set taxonomies during extlogin
+
+2022-09-29	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #35300 - Pass options as keyword arguments (#9441)
+
+2022-09-29	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35497 - New host UI - Link to host group
+
+2022-09-28	Maria <mariaaga@redhat.com>
+	* Fixes #35387 - Host details templates card (#9359)
+
+2022-09-28	Evgeni Golov <evgeni@golov.de>
+	* Fixes #32685 - update graphql to 1.13.x
+
+2022-09-27	Adam Růžička <adamruzicka@users.noreply.github.com>
+	* Fixes #35561 - Allow delaying yggdrasil restart (#9435)
+
+2022-09-27	Dyrkon <dyrkon603@gmail.com>
+	* Fixes #35131 - Change icon of disabled user
+
+2022-09-27	Maria <mariaaga@redhat.com>
+	* Fixes #35558 - Fix current lint warnings (#9433)
+
+2022-09-26	Adam Růžička <adamruzicka@users.noreply.github.com>
+	* Fixes #35530 - Make save_to_file macro safer (#9426)
+
+2022-09-26	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35448 - Update roadie-rails to 3.x
+
+2022-09-23	Adam Ruzicka <a.ruzicka@outlook.com>
+	* Refs #35414 - Fix sd_notify for multiple orchestrators
+	* Fixes #35414 - Drop sd_notify usage
+	* Fixes #35414 - Bump Sidekiq to 6.3.z
+
+2022-09-22	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34997 - Fix expand/collapse all behavior in Details tab (#9416)
+
+2022-09-22	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35450 - Update rack-cors to 1.1.x
+	* Fixes #35449 - Update sshkey to 2.x
+
+2022-09-21	Ian Ballou <ianballou67@gmail.com>
+	* Fixes #35347 - purge old trends and foreman_docker references during upgrade (#9343)
+
+2022-09-21	Matt Darcy <matt@projecthugo.co.uk>
+	* Fixes #35466 - Correct repo location of puppet-release files
+
+2022-09-21	Maria <mariaaga@redhat.com>
+	* Fixes #34764 - refactor filters page (#9186)
+
+2022-09-20	Adam Ruzicka <a.ruzicka@outlook.com>
+	* Fixes #34949 - Do not set taxonomies during extlogin
+
+2022-09-20	tux93 <tux93@users.noreply.github.com>
+	* Fixes #35285: New Discovery kexec template for Ubuntu Autoinstall (#9322)
+
+2022-09-19	tux93 <tux93@users.noreply.github.com>
+	* Fixes #35240 - Add support for static IP to AutoYaST PXELinux (#9311)
+
+2022-09-19	Marek Hulán <ares@users.noreply.github.com>
+	* Fixes #35519 - fix the iPXE default template description (#9421)
+
+2022-09-19	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #35206 - more accurate messaging when host statuses are cleared
+
+2022-09-19	Matěj Mudra <54201410+Dyrkon@users.noreply.github.com>
+	* Fixes #25507 - Add a help bubble with an explanation and link to a manual (#9405)
+
+2022-09-19	Pavel Moravec <pmoravec@redhat.com>
+	* Fixes #35485 - concurrent safe create OS when parsing facts (#9403)
+
+2022-09-19	Leos Stejskal <lstejska@redhat.com>
+	* refs #35331 - Anaconda rhsm RHEL 9 params fix
+
+2022-09-15	nofaralfasi <nalfassi@redhat.com>
+	* Fixes #35416 - adding a disabled option to links in the dropdown menus
+
+2022-09-15	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35331 - Use Anaconda rhsm in kickstart for RHEL 9
+	* Fixes #35391 - Dev docs - Smart Proxy, REX & Ansible
+
+2022-09-15	nofar <nalfassi@redhat.com>
+	* Fixes #35417 - adding testing instructions to the development setup guide. (#9369)
+
+2022-09-14	Matěj Mudra <54201410+Dyrkon@users.noreply.github.com>
+	* Fixes #35055 - Add permission to action_permission for bootfiles (#9397)
+
+2022-09-14	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35488 - Fix snapshots:generate task
+
+2022-09-14	Matt Darcy <matt@projecthugo.co.uk>
+	* fixes #31593 - included puppet7 param in kickstart_default header
+
+2022-09-12	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35300 - Pass keyword arguments correctly (#9332)
+
+2022-09-11	MariaAga <mariaaga@redhat.com>
+	* Fixes #35424 - host details audits change from list to table
+
+2022-09-09	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #35180 - Remove default network identifier
+
+2022-09-09	Pat Riehecky <riehecky@fnal.gov>
+	* Fixes #35137 - Permit setting puppet tag during install
+	* Fixes #35177 - Option to switch to graphical kickstart
+
+2022-09-08	Maria <mariaaga@redhat.com>
+	* Fixes #35491 - host details statuses clear button disabled (#9409)
+
+2022-09-08	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35480 - Host provisioning & OS without family
+
+2022-09-08	MariaAga <mariaaga@redhat.com>
+	* Fixes #35439 - Add ouia-id to ConfirmModal
+
+2022-09-07	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35490 - Registration - Changing proxy cause an error
+
+2022-09-07	Maria <mariaaga@redhat.com>
+	* Fixes #35475 - add masonryLayout to os card (#9400)
+
+2022-09-07	Matěj Mudra <54201410+Dyrkon@users.noreply.github.com>
+	* Fixes #35152 - Add clone media option (#9350)
+
+2022-09-07	Adam Ruzicka <a.ruzicka@outlook.com>
+	* Fixes #35472 - Try restarting yggdrasild before enabling it
+
+2022-09-06	Lucy Fu <lufu@redhat.com>
+	* Fixes #35436 - Add ouiaId prop to all supported components in host details
+
+2022-09-06	Matěj Mudra <54201410+Dyrkon@users.noreply.github.com>
+	* Fixes #31966 - Add warning for foreman-rake permissions:reset task (#9395)
+
+2022-09-02	Jonas Trüstedt <truestedt@atix.de>
+	* Fixes #35166 - Enable static IP for Ubuntu Autoinstall
+
+2022-08-31	Bernhard Suttner <sbernhard@users.noreply.github.com>
+	* Fixes #35203 - bulk rebuild host if token expired (#9316)
+
+2022-08-30	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #29539 - Unbundle websockify
+
+2022-08-29	Maria <mariaaga@redhat.com>
+	* Fixes #35305 - make host details labels clickable (#9393)
+	* Fixes #35319 - host card remove isSelectable/isHoverable (#9344)
+
+2022-08-29	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35447 - Update apipie-rails to 0.8.x
+
+2022-08-29	Chris Roberts <chrobert@redhat.com>
+	* Fixes #35438 - Unescape cluster on compute resource controller
+
+2022-08-29	Evgeni Golov <evgeni@golov.de>
+	* Fixes #35403 - disable public_file_server in production
+
+2022-08-26	Maria <mariaaga@redhat.com>
+	* Fixes #35345 - Host details Operating system card (#9341)
+
+2022-08-26	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #35428 - Simplify i18n.fallbacks handling
+	* Fixes #35428 - Update rails-i18n to version 7
+
+2022-08-25	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35430 - Update as_deprecations_tracker for Ruby 3
+	* Fixes #35429 - Update oauth to version 1.x
+	* Fixes #35427 - Update scoped_search to at least 4.1.10
+	* Refs #35420 - Remove unused settings.yaml.dist file
+	* Fixes #35423 - Update ancestry to version 4
+	* Fixes #35422 - Update audited to version 5
+	* Fixes #35420 - Drop boot_settings.rb for early settings
+
+2022-08-25	Shim Shtein <sshtein@redhat.com>
+	* Fixes #35361 - Add hidden columns back for compatibility
+
+2022-08-25	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35361 - Make columns on host index page selectable
+
+2022-08-24	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35421 - Pin will_paginate to at least 3.3.0
+	* Fixes #35419 - Remove empty webpack_assets.rb file (#9370)
+
+2022-08-23	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35264 - Unpin net-ssh dependency
+
+2022-08-22	snemeth <snemeth@dynamic-2a00-1028-83a6-3cba-0eb1-2bbc-4b42-8938.ipv6.o2.cz>
+	* fixes #35377 - allow upper case letter in device identifiers
+
+2022-08-19	Pat Riehecky <3534830+jcpunk@users.noreply.github.com>
+	* Fixes #35194 - add option for reboot --kexec to kickstart
+
+2022-08-19	Pat Riehecky <riehecky@fnal.gov>
+	* Fixes #35207 - dual stack fallback
+
+2022-08-17	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #35294 - Switch to masonry card layout for Details tab
+
+2022-08-17	Partha Aji <paji@redhat.com>
+	* Refs #35359 - cleaner add_ca_bundle_to_store
+
+2022-08-16	Partha Aji <paji@redhat.com>
+	* Fixes #35359 - Add cacert to http proxy (#9348)
+
+2022-08-16	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35371 - Update show_me_the_cookies to 6.x
+
+2022-08-11	Bernhard Suttner <sbernhard@users.noreply.github.com>
+	* Fixes #35346 - change only the corresponding network (#9342)
+
+2022-08-11	Amit Upadhye <upadhyeammit@gmail.com>
+	* Update develop to 3.5.0-develop
+
+2022-08-10	Matěj Mudra <54201410+Dyrkon@users.noreply.github.com>
+	* Fixes #35151 - Add CentOS Stream 9 installation medium (#9346)
+
+2022-08-10	Shim Shtein <sshtein@redhat.com>
+	* Refs #35274 - Revert "Make columns on host index page selectable (#9319)"
+
+2022-08-08	Amit Upadhye <upadhyeammit@gmail.com>
+	* i18n - extracting new, pulling from tx
+
+2022-08-08	Bernhard Suttner <sbernhard@users.noreply.github.com>
+	* Fixes #35279 - Add SLES support for host registration (#9320)
+
+2022-08-07	pandrieux <31440210+pandrieux@users.noreply.github.com>
+	* Fixes #33565 - speed-up kickstart on air gapped infra (#8795)
+
+2022-08-05	tux93 <tux93@users.noreply.github.com>
+	* Fixes #35239 - Update AutoYaST SLES default provisioning template for 15 SP4 (#9309)
+
+2022-08-03	Ron Lavi <1ronlavi@gmail.com>
+	* Refs #35160 - Add explanation about plugin installation
+
+2022-08-03	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35306 - host_puppet_* template macros ignores host_param (#9334)
+
+2022-08-03	nofaralfasi <nalfassi@redhat.com>
+	* Fixes #35288 - add pry debugging to the development setup guide
+
+2022-08-03	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35274 - Make columns on host index page selectable (#9319)
+
+2022-08-03	Bernhard Suttner <sbernhard@users.noreply.github.com>
+	* Fixes #35280 - Install katello-host-tools / -tracer during host registration (#9321)
+
+2022-08-02	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #30659 - Allow friendly_id 5.4 again
+	* Fixes #35298 - Pass trim_mode as a keyword argument
+	* Fixes #35299 - Remove redundant mocha inclusion
+	* Fixes #35301 - minitest 5 deprecation fixes
+
+2022-08-02	Shim Shtein <sshtein@redhat.com>
+	* Fixes #35132 - Make audits host detection regex more strict
+
+2022-07-30	Ondrej Ezr <oezr@redhat.com>
+	* Fixes #35293 - unambigous call
+
+2022-07-27	Shim Shtein <sshtein@redhat.com>
+	* Fixes #35289 - Add cali* interfaces to ignore list
+
+2022-07-26	nofar <nalfassi@redhat.com>
+	* Fixes #35127 - migrate discovery and bootdisk templates to Foreman (#9314)
+
+2022-07-25	Pat Riehecky <riehecky@fnal.gov>
+	* Fixes #35135 - GPG key import should use https
+
+2022-07-25	nofar <nalfassi@redhat.com>
+	* Fixes #4007 - updating users email to be optional (#9279)
+	* Fixes #35167 - move hostgroups dropdown actions to extendable helper (#9297)
+
+2022-07-20	Pat Riehecky <riehecky@fnal.gov>
+	* Fixes #35187 - puppet params for non-integrated
+
+2022-07-19	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35244 - Pin Faraday to 1.x
+
+2022-07-19	pheeeter <petokoprda@gmail.com>
+	* Fixes #35212 - Add options for table preferences API
+
+2022-07-15	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #34526 - Drop Rails 6.0 support code
+
+2022-07-15	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35210 - Allow symbols and hashes in YAML columns
+
+2022-07-12	Garret Rumohr <garretr@gmail.com>
+	* Fixes #34975 - Removed ks=. is supplied by kernel options snippet (#9238)
+
+2022-07-12	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35182 - Add Rocky Linux UEFI provisioning support
+	* Fixes #35196 - Use assert_equal to match rendered templates
+
+2022-07-12	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35173 - Better distinguish autocompletion for index pages
+
+2022-07-11	Adam Ruzicka <a.ruzicka@outlook.com>
+	* Fixes #35174 - Expose Foreman short version as a macro
+
+2022-07-11	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #35179 - Use Ruby 2.7 for Rubocop action
+
+2022-07-11	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #34941 - Enable Ubuntu Autoinstall smart proxy deployment
+
+2022-07-10	nofaralfasi <nalfassi@redhat.com>
+	* Fixes #32925 - added validation for root_pass on provisioning settings
+
+2022-07-08	Robert Frank <robert.frank@manchester.ac.uk>
+	* Fixes #35035 - set VNC password length to 8 chars.
+
+2022-07-05	Lucy Fu <lufu@redhat.com>
+	* Fixes #34961 - Move expansion carat to right side for Details tab cards
+
+2022-07-05	Ron Lavi <1ronlavi@gmail.com>
+	* Fixes #35126 - Hide reports "Origin" column when table is already filtered by origin
+
+2022-07-05	nofaralfasi <nalfassi@redhat.com>
+	* Fixes #35160 - adding a development installation guide for Foreman
+
+2022-07-01	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35146 - Lock rack-test < 2.0.0 (#9288)
+
+2022-06-29	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #35072 - Save search props into store
+
+2022-06-28	Pat Riehecky <3534830+jcpunk@users.noreply.github.com>
+	* Fixes #35066 - Puppet enablement flags are inconsistent (#9263)
+
+2022-06-27	Adam Ruzicka <a.ruzicka@outlook.com>
+	* Fixes #35015 - Use http proxy when pulling RSS
+	* Fixes #34996 - Ignore http proxies when talking to smart proxies
+	* Fixes #35014 - Rework Net
+	* Fixes #35014 - Fix injection of global HTTP proxy into net/http
+
+2022-06-23	Pat Riehecky <riehecky@fnal.gov>
+	* Fixes #32612 - Add some extra metadata to the default kickstart
+
+2022-06-23	Ron Lavi <1ronlavi@gmail.com>
+	* Fixes #35083 - add power status timeout param
+
+2022-06-23	Amit Upadhye <upadhyeammit@gmail.com>
+	* i18n - extracting new, pulling from tx
+	* Fixes #35098 - add Georgian(ka), Polish(pl) and Catalan(ca) langauges
+
+2022-06-22	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #35069 - ApplicationRecord.<=> undefined method 'name'
+
+2022-06-22	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #32881 - Expose previous application record revision through safemode (#9258)
+
+2022-06-22	Lucy Fu <lufu@redhat.com>
+	* Fixes #34901 - System properties card updates
+
+2022-06-22	dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+	* Bump actions/setup-node from 1 to 3
+	* Bump actions/checkout from 2 to 3
+
+2022-06-22	naveen <172697+naveensrinivasan@users.noreply.github.com>
+	* chore: Included githubactions in the dependabot config
+
+2022-06-21	Eric D. Helms <ericdhelms@gmail.com>
+	* Split npm dependency resolution from module installation in React tests
+
+2022-06-21	Bernhard Suttner <suttner@atix.de>
+	* Fixes #35047 - improve copy to clipboard react component
+
+2022-06-20	Marek Hulan <mhulan@redhat.com>
+	* Fixes #34971 - fix the validators label help
+
+2022-06-17	Jeremy Lenz <jlenz@redhat.com>
+	* Refs #35001 - fix recent communication card weight
+
+2022-06-16	Adam Růžička <adamruzicka@users.noreply.github.com>
+	* Fixes #34969 - Set up REX pull on client setup (#9235)
+
+2022-06-15	MariaAga <mariaaga@redhat.com>
+	* Fixes #34791 - remove pf3 bookmarks
+
+2022-06-15	naveen <172697+naveensrinivasan@users.noreply.github.com>
+	* chore: Set permissions for GitHub actions
+
+2022-06-14	MariaAga <mariaaga@redhat.com>
+	* Fixes #34998 - long breadcrumb switcher is out of view
+
+2022-06-13	Adam Růžička <adamruzicka@users.noreply.github.com>
+	* Support != and ~ search on os_minor and ~ on os_major (#9243)
+
+2022-06-10	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #35001 - adjust card weights
+
+2022-06-10	Lucy Fu <lufu@redhat.com>
+	* Fixes #35017 - Add Tracer installation status to System properties card. (#9252)
+
+2022-06-09	Evgeni Golov <evgeni@golov.de>
+	* filter-package-json: add cli options for files
+
+2022-06-09	nofaralfasi <nofaralfasi@gmail.com>
+	* Fixes #34948 - drop missing owner notification
+
+2022-06-08	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34981 - Add 'Recent communication' card to overview
+
+2022-06-08	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #34987 - Force 1 call on first load for TableIndexPage
+
+2022-06-08	Ondrej Ezr <oezr@redhat.com>
+	* Fixes #35013 - config rake uses Setting DSL
+
+2022-06-08	Kenyon Ralph <kenyon@kenyonralph.com>
+	* preseed_default_finish: fix typo
+
+2022-06-08	Tilman Kranz <tilman.kranz@b1-systems.de>
+	* Fixes #34887 - userdata controller should be able to look up host by MAC address
+
+2022-06-07	nofaralfasi <nofaralfasi@gmail.com>
+	* Fixes #28810 - changes to Any organization & Any location taxonomy's names
+
+2022-06-07	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #34942 - Adapt installation media search path for Ubuntu 20.04.3+
+
+2022-06-06	nofaralfasi <nofaralfasi@gmail.com>
+	* Fixes #9770 - add functionality to create hosts from hostgroups
+
+2022-06-06	MariaAga <mariaaga@redhat.com>
+	* Fixes #32476 - 'No matches found' text is untranslated
+	* Fixes #34881 - Clean up MountingService
+
+2022-06-01	Eric D. Helms <ericdhelms@gmail.com>
+	* Fixes #34978: Do not use Apipie DSL cache
+
+2022-06-01	Ondrej Ezr <oezr@redhat.com>
+	* Refs #34305 - forgotten category for new settings
+
+2022-06-01	Evgeni Golov <evgeni@golov.de>
+	* Refs #32686 - relax fog-core pin, we support newer fog-google now
+	* Fixes #34994 - require ApplicationRecord early for migrations
+
+2022-05-30	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #34700 - autoinstall template enable root user
+
+2022-05-26	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34305 - stop creating settings in DB (#9050)
+
+2022-05-25	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #34908 - Set hostname for Ubuntu Autoinstall
+	* Fixes #34718 - Ubuntu netplan use ens160 as default interface name
+
+2022-05-24	Evgeni Golov <evgeni@golov.de>
+	* Refs #34526 - Update Rails to 6.1.6
+
+2022-05-24	nofaralfasi <nofaralfasi@gmail.com>
+	* Fixes #26853 - update screenshots in readme file
+
+2022-05-24	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34526 - Switch Rails version to 6.1
+
+2022-05-23	Evgeni Golov <evgeni@golov.de>
+	* Fixes #32686 - use fog-google 1.14+, compatible with Ruby 3.0
+
+2022-05-23	Eric D. Helms <ericdhelms@gmail.com>
+	* Fixes #34939: Use rabl 0.15.0 or greater
+
+2022-05-22	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34921 - Fix SettingValueException error message
+
+2022-05-19	Evgeni Golov <evgeni@golov.de>
+	* Fixes #34938 - don't re-evaluate input() values on each host
+
+2022-05-19	nofar <nofaralfasi@gmail.com>
+	* Refs #33672 - remove unnecessary timestamps from taxable_taxonomies table
+
+2022-05-19	Marek Hulan <mhulan@redhat.com>
+	* Fixes #34396 - job report tweaks
+
+2022-05-18	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34702 - use warning instead of halt for SCSI issues
+
+2022-05-18	nofaralfasi <nofaralfasi@gmail.com>
+	* Fixes #33672 - drop unnecessary timestamps
+
+2022-05-13	Adam Růžička <adamruzicka@users.noreply.github.com>
+	* Fixes #34913 - Take plugins into consideration when checking pending migrations
+
+2022-05-12	Amit Upadhye <upadhyeammit@gmail.com>
+	* Update package.json to 3.4.0
+
+2022-05-11	Amit Upadhye <upadhyeammit@gmail.com>
+	* Bump develop to 3.4.0-develop
+
+2022-05-09	Amit Upadhye <upadhyeammit@gmail.com>
+	* i18n - extracting new, pulling from tx
+
+2022-05-09	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34838 - Add errors when setting values are invalid (#9203)
+
+2022-05-08	MariaAga <mariaaga@redhat.com>
+	* Fixes #32991 - PageLayout to use PF4 components
+
+2022-05-08	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34866 - Settings - Like operator for name
+
+2022-05-06	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #34830 - Construct hostname for redirect each time
+
+2022-05-06	Evgeni Golov <evgeni@golov.de>
+	* Refs #34602 - drop restart_required_changed_plugins file on boot
+
+2022-05-05	Ron Lavi <1ronlavi@gmail.com>
+	* Fixes #34841 - remove share your feedback link in new host page
+	* Fixes #34782 - Add reports tab in host page (#9190)
+
+2022-05-04	Evgeni Golov <evgeni@golov.de>
+	* Fixes #34843 - load SSL key using OpenSSL
+
+2022-05-04	MariaAga <mariaaga@redhat.com>
+	* Fixes #34857 - show error when using node 16+
+
+2022-04-28	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34831 - change host status icon to green (#9202)
+
+2022-04-28	Peter Koprda <47797196+pkoprda@users.noreply.github.com>
+	* Fixes #34515, #34516 - Add host owner and comment on host list page (#9182)
+
+2022-04-27	Marek Hulán <ares@users.noreply.github.com>
+	* Fixes #34809 - provide a description for the checkin report (#9199)
+
+2022-04-26	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34815 - Fix slots in system properties card
+
+2022-04-25	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34798 - New host detail page sentence case fixes
+
+2022-04-25	Samir Jha <sjha4@ncsu.edu>
+	* Fixes #34802 - Pin tabbable version
+
+2022-04-22	Eric D. Helms <ericdhelms@gmail.com>
+	* Fixes #34643 - Do not use Apipie cache
+
+2022-04-20	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #33010 - Add Details tab to host details page (#9189)
+
+2022-04-19	Marek Hulan <mhulan@redhat.com>
+	* Fixes #34776 - removes the doubled description key
+
+2022-04-14	Bernhard Suttner <suttner@atix.de>
+	* Fixes #34710 - Use foreman request address
+
+2022-04-13	Ian Ballou <ianballou67@gmail.com>
+	* Fixes #34712 - Add enabled repositories report
+
+2022-04-11	MariaAga <mariaaga@redhat.com>
+	* Fixes #34748 - Taxonomies api to accept per_page all
+
+2022-04-11	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34755 - Fix text/icon alignment on host status card
+
+2022-04-11	Ron Lavi <1ronlavi@gmail.com>
+	* Fixes #34747 - override_param should consider direction
+	* Fixes #34744 - Remove reports deprecation warning
+	* Refs #31147 - fix seed:reports example
+
+2022-04-10	MariaAga <mariaaga@redhat.com>
+	* Fixes #34713 - Remove pf3 OverlayTrigger
+
+2022-04-08	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34690 - rake printing auditable attributes
+
+2022-04-07	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34745 - Error on API actions if no key is passed (#9179)
+
+2022-04-06	Christopher Smith <chris@ethica.partners>
+	* Fixes #34714 - Refactor handling of External IPAM response
+
+2022-04-03	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #33236 - optimize useAPI hook
+
+2022-03-30	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34646 - move initialization into initializer (#9155)
+	* Fixes #34603 - deprecate non-DSL setting definitions
+
+2022-03-30	MariaAga <mariaaga@redhat.com>
+	* Refs #34495 - Katello erros from Breadcrumb switcher
+
+2022-03-30	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Remove duplicate puma gem declaration
+
+2022-03-30	Romuald Conty <romuald@opus-codium.fr>
+	* Fixes #34307: Support unattended partitionning using crypto under Debian
+
+2022-03-29	Bernhard Suttner <suttner@atix.de>
+	* Fixes #34689 - bootfile should be useable in Jail
+
+2022-03-29	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34673 - properly note what identifier is passed in props
+
+2022-03-28	Bernhard Suttner <suttner@atix.de>
+	* Fixes #34658 - Harmonize preseed templates
+
+2022-03-26	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #32572 - PBKDF2 password hashing support
+
+2022-03-23	Ron Lavi <1ronlavi@gmail.com>
+	* Fixes #34542 - Add ouiaId for easier testing
+
+2022-03-23	Adam Ruzicka <a.ruzicka@outlook.com>
+	* Fixes #34614 - Provide JS helpers for dealing with global IDs
+
+2022-03-23	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34526 - rescue_from JSON params parse errors
+
+2022-03-23	Eric D. Helms <ericdhelms@gmail.com>
+	* Fixes #34649 - Upgrade Rails to 6.0.4.7
+
+2022-03-23	MariaAga <mariaaga@redhat.com>
+	* Fixes #34662 - Breadcrumb switcher use V for selected
+
+2022-03-22	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34661 - Registration migration with nil template
+
+2022-03-21	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34569 - postpone LookupValue#match validations
+
+2022-03-21	MariaAga <mariaaga@redhat.com>
+	* Fixes #34546 - Bookmarks should update the searchbar
+
+2022-03-18	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #31965 - make bmc_credentials_accessible disabled by default
+
+2022-03-17	Ian Ballou <ianballou67@gmail.com>
+	* Fixes #34610 - Entitlement report double counts consumed subs (#9151)
+
+2022-03-17	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34634 - fix order description syntax
+
+2022-03-16	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34391 - use facets to expose reported data in API
+
+2022-03-15	Lukas Zapletal <lzap+git@redhat.com>
+	* Refs #34360 - allow host deleting with host_reports plugin
+
+2022-03-15	Ondřej Ezr <oezr@redhat.com>
+	* Refs #34558 - update snapshots
+	* Fixes #34570 - pass kwarks args properly
+
+2022-03-15	Daniel Henninger <daniel@ncsu.edu>
+	* Fixes #34558 - Trigger Ansible provisioning callback from Preseed Finish
+
+2022-03-14	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34572 - fix invalid redirect after host edit
+	* Refs #34511 - align pf4 design to breadcrumbs
+
+2022-03-14	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #30861 - keep setting collections in registry
+	* Fixes #34557 - improve association resolver
+	* Fixes #34596 - sanitize default template names
+
+2022-03-14	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #34565 - fix installation media for Ubuntu versions with autoinstall (20.04.3+)
+
+2022-03-11	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #33782 - do not use fixtures for Settings
+
+2022-03-11	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #32035 - Add DSL autocompletion in templates
+	* Fixes #34481 - Update foreman-js to 10.1.0
+
+2022-03-10	MariaAga <mariaaga@redhat.com>
+	* Fixes #34495 - Breadcrumb switcher doesn't work with katello
+	* Fixes #34228 - close bookmarks after selecting a bookmark
+
+2022-03-10	Ondřej Ezr <oezr@redhat.com>
+	* Refs #33937 - improve setting usage
+
+2022-03-10	Ben Magistro <koncept1@gmail.com>
+	* Fixes #33937 - Use local boot template setting
+
+2022-03-09	Tomer Brisker <tbrisker@gmail.com>
+	* Fixes #10413 - Drop unattended mode deprecation
+	* Refs #10413 - Drop unattended mode checks from views
+	* Refs #10413 - Drop unattended mode check in controllers
+	* Refs #10413 - Drop unattended mode checks from menu
+	* Refs #10413 - Drop unattended mode checks in helpers
+	* Refs #10413 - Drop unattended mode checks from models
+	* Refs #10413 - Drop unattended mode check in app init
+	* Refs #10413 - Remove unattended mode check in routes
+	* Refs #10413 - Remove unattended: false from tests
+	* Refs #10413 - Force :unattended: true
+
+2022-03-09	Ron Lavi <1ronlavi@gmail.com>
+	* Refs #34580 - fix unrelated tests snapshots
+	* Fixes #34580 - Remove pagination deprecations
+
+2022-03-09	Jeremy Lenz <jlenz@redhat.com>
+	* Refs #34442 - Allow Katello to hide tabs on new host detail page
+
+2022-03-09	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34579 - fix the redirect after canceling host's form
+
+2022-03-09	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34573 - encrypt DSL setting values
+
+2022-03-09	Daniel Henninger <daniel@ncsu.edu>
+	* Fixes #34553 - Use systemd for Ansible callback under newer Debian family OSes
+
+2022-03-08	Ondřej Ezr <oezr@redhat.com>
+	* Refs #34323 - explicit value for Rails 6.1
+
+2022-03-08	Jason <ludovicus3@users.noreply.github.com>
+	* Fixes #34571 - Add Safemode Jail for ActiveSupport
+
+2022-03-08	Evgeni Golov <evgeni@golov.de>
+	* Refs #33671 - print apipie warnings on stderr
+
+2022-03-07	Sayan Das <saydas@redhat.com>
+	* Fixes #34525 - Call insights snippet by honoring host_registration_insights param during system build
+
+2022-03-04	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34339 - sanitize fqdn in tests
+
+2022-03-04	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34513 - Undefined method 'format_errors' when db:seed fail
+
+2022-03-04	Daniel Henninger <daniel@ncsu.edu>
+	* fixes #34388 - Add support for configuring puppet in UI, but skipping setup during preseed/kickstart.
+
+2022-03-03	Nagoor Shaik <nshaik@redhat.com>
+	* Fixes #34498 - added RHEL9 and CentOS9 Guest OSes
+
+2022-03-03	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #33660 - ignore dynflow tables for dump
+
+2022-03-03	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34240 - do not read undefined setting
+
+2022-03-02	Lukas Zapletal <lzap+git@redhat.com>
+	* Refs #34489 - update snapshot tests for Yast PXE
+	* Fixes #34532 - disable EFI local chainloading by default
+
+2022-03-02	Erik Berg <erikberg@usit.uio.no>
+	* Fixes #33938 - Implement driverdisk --source=url
+	* Fixes #33930 - templates: set vgname based on dev
+
+2022-03-02	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34328 - GraphQL use directly SettingRegistry
+
+2022-03-02	Nadja Heitmann <nadjah@atix.de>
+	* Fixes #34544 - Update pagelet documentation for developers
+	* Fixes #34543 - Add mountpoints for hosts list
+
+2022-03-01	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #32632 - initial verison of Ubuntu autoinstall templates
+
+2022-03-01	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34506 - infer correct permisson name in authorized_for
+
+2022-03-01	Marek Hulan <mhulan@redhat.com>
+	* Fixes #34346 - support Openstack URI with paths
+
+2022-03-01	Marcel Kühlhorn <marcelk@atix.de>
+	* Fixes #34311 - Update AutoYaST SLES default for 15 SP3
+	* Fixes #34489 - AutoYaST PXE http-proxy without http-proxy-port
+
+2022-03-01	Markus Bucher <bucher@atix.de>
+	* Fixes #20265 - Add UEFI Grub(2) templates for SUSE
+
+2022-02-28	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #33948 - Present network info in single columns
+
+2022-02-24	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34511 - add breadcrumb's switcher to the new host page
+
+2022-02-24	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34462 - shorten DNS timeout for primary detection
+
+2022-02-24	Nagoor Shaik <nshaik@redhat.com>
+	* Fixes #34499 - new h/w versions for vSphere 7.0 U2 & U3
+
+2022-02-23	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34500 - Add Rails 6.1 support
+	* Refs #34500 - reimplement routing hash_for on Rails 6.1
+
+2022-02-23	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #34450 - Normalize CentOS casing from facts
+
+2022-02-21	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #30122 - remove usage of controller level force_ssl
+
+2022-02-21	aabramov <aabramov@redhat.com>
+	* Fixes #34251 - Add API endpoint for import Ipv4 subnet
+
+2022-02-17	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34350 - Require 'foreman/telemetry' in ldap initializer
+
+2022-02-16	MariaAga <mariaaga@redhat.com>
+	* Fixes #34290 - Create pf4 breadcrumb switcher
+
+2022-02-16	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34326 - improve test clarity
+
+2022-02-15	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34416 - taxonomy title in ForemanContext
+
+2022-02-14	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34353 - Fix early load of fog_extensions
+
+2022-02-10	Amit Upadhye <upadhyeammit@gmail.com>
+	* Bump develop to 3.3-develop
+
+2022-02-10	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34375 - allow passing empty attributes for facets (#9083)
+
+2022-02-10	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34409 - rename existing CentOS OSes to CentOS_Stream
+
+2022-02-09	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34365 - Update examples for truthy? and falsy? macros
+
+2022-02-09	Amit Upadhye <upadhyeammit@gmail.com>
+	* i18n - extracting new, pulling from tx
+
+2022-02-08	Oleh Fedorenko <ofedoren@redhat.com>
+	* Refs #34360 - Use Plugin's API
+
+2022-02-08	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34410 - add missing variant prop to pagination
+
+2022-02-04	Amir Fefer <amirfefer@gmail.com>
+	* Refs #33862 - fix empy page props
+
+2022-02-04	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34371 - correctly construct fqdn for redirct
+
+2022-02-03	aabramov <aabramov@redhat.com>
+	* Fixes #34381 - Change example for --order
+
+2022-02-02	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34360 - prepare for Host Reports migration
+	* Fixes #34330 - fix rhsm puppet parser for IPv6
+
+2022-02-02	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #33781 - deprecate non-DSL setting definitions
+	* Fixes #34366 - skip GraphQL types enhancements in migrations
+
+2022-02-01	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34349 - improve api/settings#index coverage
+
+2022-01-31	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34323 - use defaults from memory
+	* Refs #34323 - sanitize setting fixtures
+
+2022-01-31	Adam Ruzicka <aruzicka@redhat.com>
+	* Fixes #34351 - Allow Site manager role to be extended from plugins
+
+2022-01-30	Adam Ruzicka <aruzicka@redhat.com>
+	* Fixes #34329 - Allow permissions to be excluded from default roles
+
+2022-01-30	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34293 - remove experimental banner in new host page
+
+2022-01-28	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34340 - Insights snippet - remove connection test
+
+2022-01-27	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34302 - associate CentOS_Stream OS with the templates
+	* Fixes #34315 - adds Oracle VIF hypervisor NIC filter
 
 2022-01-26	Ondřej Ezr <oezr@redhat.com>
 	* Fixes #34300 - correctly construct the fqdn for redirect
 	* Fixes #34289 - remove workaround for encoding root_pass
 
-2022-01-26	Justin Sherrill <jsherril@redhat.com>
+2022-01-25	MariaAga <mariaaga@redhat.com>
+	* Fixes #33946 - remove dangerouslySetInnerHTML uses
+
+2022-01-25	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34249 - Update subman facts after host registration
+
+2022-01-25	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34254 - remove host details link from hosts index
+
+2022-01-25	Evgeni Golov <evgeni@golov.de>
+	* update npm exclude list
+
+2022-01-24	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34198 - Registration and host_init_config templates previews
+
+2022-01-24	MariaAga <mariaaga@redhat.com>
+	* Fixes #34062 - update ace-editor to fix toggel typo
+
+2022-01-24	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #33862 - add empty state for new host page
+
+2022-01-24	Justin Sherrill <jsherril@redhat.com>
 	* Fixes #34299 - allow input deletion during seeding
 
-2022-01-26	Leos Stejskal <lstejska@redhat.com>
-	* Fixes #34249 - Update subman facts after host registration
+2022-01-21	Ondřej Ezr <oezr@redhat.com>
+	* Refs #34006 - enable setup in tests
+	* Fixes #34006 - use rbac_registry for all plugin rbac
+	* Fixes #34010 - add a setup hook to RbacRegistry
+	* Fixes #34009 - add finalization hook to plugin
+
+2022-01-21	Nadja Heitmann <nadjah@atix.de>
+	* Refs #33418 - Make last_report.origin interval parametrizable fixup
+
+2022-01-21	Oliver Freyermuth <o.freyermuth@googlemail.com>
+	* Fixes #34292 - support pxe_kernel_options in Preseed templates
+
+2022-01-20	Nadja Heitmann <nadjah@atix.de>
+	* Refs #33418 - Make last_report.origin interval parametrizable
+
+2022-01-20	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34259 - add slot for rex dropdown in host page
 
 2022-01-20	Stejskal Leos <github@stejskalleos.cz>
 	* Refs #34252 - Registration API - Remove dots from param descriptions
 
-2022-01-20	Leos Stejskal <lstejska@redhat.com>
-	* Fixes #34252 - Missing example for 'Install packages' field
-
-2022-01-19	Jeremy Lenz <jlenz@redhat.com>
-	* Fixes #34271 - Ignore url query params when setting active tab
-
-2022-01-19	Lukas Zapletal <lzap+git@redhat.com>
-	* Fixes #34265 - change more deprecated ks/sendmac Anaconda options
-
-2022-01-19	Leos Stejskal <lstejska@redhat.com>
-	* Fixes #34250 - Insecure help text at Host Registration
-	* Fixes #34213 - truthy? and falsy? template helpers
-
-2022-01-19	rbertol <rudnei@redhat.com>
-	* Fixes #33942 - Allow extra vars for awx/tower on snippet template.
-
 2022-01-19	Amir Fefer <amirfefer@gmail.com>
-	* Fixes #34142 - make the core cards arrangeable in new host page (#8995)
 	* Fixes #34223 - fix the missing username in audits
 
-2022-01-19	Bernhard Suttner <sbernhard@users.noreply.github.com>
-	* Fixes #30550,#28155 - Return valid vsphere folder (#9006)
+2022-01-18	Jan Matusz <me@marahin.pl>
+	* Fixes #34280 - Add `ip_include?` method to `IPAM
 
-2022-01-19	Stejskal Leos <github@stejskalleos.cz>
-	* Fixes #34206 - Fix bool params in global registration template
+2022-01-18	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #31027 - transpiler macros for CoreOS family
 
-2022-01-11	Adam Cécile <acecile@letz-it.lu>
-	* Fixes #34214 - use host_param_true? to detect puppet6-repo
+2022-01-18	Jeremy Lenz <jlenz@redhat.com>
+	* Fixes #34271 - Ignore url query params when setting active tab
 
-2022-01-10	Lukas Zapletal <lzap+git@redhat.com>
-	* Fixes #34026 - authorize puppet reports via Proxy
-	* Fixes #34122 - Report disallowed metric labels as other
-	* Refs #33968 - Fix the fix of Telemetry initializers
+2022-01-17	Ron Lavi <1ronlavi@gmail.com>
+	* Fixes #34133 - Add PF4 pagination
+
+2022-01-17	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34265 - change more deprecated ks/sendmac Anaconda options
+
+2022-01-14	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34252 - Missing example for 'Install packages' field
+	* Fixes #34250 - Insecure help text at Host Registration
+
+2022-01-14	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34234 - do not allow HTTP on SmartProxy Auth
+
+2022-01-12	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #34236 - Drop require_ssl_smart_proxies setting
+
+2022-01-11	Oleh Fedorenko <ofedoren@redhat.com>
+	* Revert "Fixes #32035 - Add DSL autocompletion in templates"
+
+2022-01-10	Ondřej Ezr <oezr@redhat.com>
+	* Refs #33968 - Telemetry is not autoloadable
 
 2022-01-10	Leos Stejskal <lstejska@redhat.com>
-	* Fixes #33968 - Fix loading of Foreman
+	* Fixes #23300 - Brakeman SQL injections
 
-2022-01-10	Ron Lavi <1ronlavi@gmail.com>
-	* Fixes #34140 - remove reports warning
+2022-01-07	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #32035 - Add DSL autocompletion in templates
 
 2022-01-06	Ben Tucci <ben@trid.in>
 	* Fixes #33310 - Remove epoch shifting, as AreaChart already does this
 
-2022-01-05	Ondřej Ezr <oezr@redhat.com>
+2022-01-06	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #34142 - make the core cards arrangeable in new host page (#8995)
+	* Fixes #34166 - opt in the new host page by default
+
+2022-01-06	Bernhard Suttner <sbernhard@users.noreply.github.com>
+	* Fixes #30550,#28155 - Return valid vsphere folder (#9006)
+
+2022-01-05	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34122 - Report disallowed metric labels as other
+
+2022-01-05	Stejskal Leos <github@stejskalleos.cz>
+	* Fixes #34206 - Fix bool params in global registration template
+
+2022-01-05	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34213 - truthy? and falsy? template helpers
+	* Fixes #34165 - Require code from lib folder
+
+2022-01-05	Adam Cécile <acecile@letz-it.lu>
+	* Fixes #34214 - use host_param_true? to detect puppet6-repo
+
+2022-01-04	Ondřej Ezr <oezr@redhat.com>
 	* Fixes #34212 - pin rdoc < 6.4 to avoid psych dependency
 
-2021-12-21	adewar <andrewgdewar@gmail.com>
+2022-01-03	MariaAga <mariaaga@redhat.com>
+	* Fixes #34058 - extract multiline string for translation
+	* i18n - extracting new
+
+2022-01-03	Dominik Matoulek <domitea@gmail.com>
+	* Fixes #33470 - Adding support for CentOS Stream
+
+2021-12-21	MariaAga <mariaaga@redhat.com>
+	* Fixes #33736 - Allow 2 search with bookmark in one page
+
+2021-12-21	aabramov <aabramov@redhat.com>
+	* Fixes #34123 - Add mail_enabled to user
+
+2021-12-17	Tomer Brisker <tbrisker@gmail.com>
+	* Fixes #34160 - Improve fact_values api performance
+
+2021-12-15	Lukáš Zapletal <lzap+git@redhat.com>
+	* Fixes #34091 - add logging helper log_duration
+
+2021-12-15	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34146 - Move services from lib/foreman to app/services/foreman
+	* Fixes #34138 - Autoload ProxyAPI files from /app/services
+	* Fixes #28571 - move away from record_tag_helper
+
+2021-12-15	adewar <andrewgdewar@gmail.com>
 	* Fixes #34129 - HostDetails - UX Review - Spacing
 
-2021-12-11	Marek Hulan <mhulan@redhat.com>
-	* Fixes #33981 - fix the RHEL OS name parsing
+2021-12-15	aabramov <aabramov@redhat.com>
+	* Fixes #33775 - Add Support to ? for setting wildcards
 
-2021-12-09	Amit Upadhye <upadhyeammit@gmail.com>
-	* Release 3.1.0
+2021-12-15	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #34151 - translate just once
+
+2021-12-15	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #34026 - authorize puppet reports via Proxy
+
+2021-12-14	Bastian Schmidt <schmidt@atix.de>
+	* Fixes #32919 - Add Salt Autosign grain to minion configuration
+
+2021-12-14	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #34139 - Move Foreman
+
+2021-12-14	Anna Vitova <avitova@avitova.remote.csb>
+	* Fixes #33417 - Hide version from the Login page
+
+2021-12-12	Ron Lavi <rlavi@redhat.com>
+	* Revert "Fixes #30665 - drop the intl polyfills"
+
+2021-12-11	Dominik Matoulek <domitea@gmail.com>
+	* Fixes #34068 - Inconsistent name of Job invocation report template
+
+2021-12-10	Evgeni Golov <evgeni@golov.de>
+	* Refs #26968 - don't disable Katellos MeantimeReporter
+	* exclude all @testing-library packages from packaging
+
+2021-12-10	Avi Sharvit <sharvita@gmail.com>
+	* Fixes #30665 - drop the intl polyfills
 
 2021-12-09	Tomer Brisker <tbrisker@gmail.com>
+	* Fixes #34117 - Drop ancient models:consolidate task
 	* Refs #10413 - Deprecate setting unattended: false
+	* Fixes #34063 - Drop deprecated Host#import_facts method
 
 2021-12-08	Evgeni Golov <evgeni@golov.de>
 	* Fixes #34086 - explicitly depend on graphql-tag
+	* Fixes #22110 - allow minitest 5.11 and newer
 
 2021-12-08	Tomer Brisker <tbrisker@gmail.com>
 	* Refs #34093 - Document Authorizer#can? and log huge cache loads
@@ -82,57 +1329,131 @@
 	* Refs #34093 - Minor authorizer clean ups
 	* Fixes #34093 - Don't eager load all authorized resources
 
+2021-12-08	Lukas Zapletal <lzap+git@redhat.com>
+	* Refs #33968 - Fix the fix of Telemetry initializers
+
 2021-12-08	Erik Berg <erikberg@usit.uio.no>
 	* Fixes #34088 - templates puppet repo parameters
 
-2021-12-08	Amir Fefer <amirfefer@gmail.com>
-	* Fixes #33151 - translate host details tabs title
-
-2021-12-08	Lukas Zapletal <lzap+git@redhat.com>
-	* Fixes #33929 - improve subnet network exception
-
-2021-12-07	Amir Fefer <amirfefer@gmail.com>
+2021-12-06	Amir Fefer <amirfefer@gmail.com>
 	* Fixes #34085 - fix 'all audits' link in host page
-
-2021-12-07	Lukas Zapletal <lzap+git@redhat.com>
-	* Fixes #32461 - add endline in save_to_file
+	* Fixes #33151 - translate host details tabs title
 
 2021-12-06	Leos Stejskal <lstejska@redhat.com>
 	* Fixes #33897 - Puppet Environment in taxonomy ignore_types
 
-2021-11-29	Shimon Shtein <sshtein@redhat.com>
+2021-12-02	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Fixes #26968 - Switch to minitest-reporters
+
+2021-12-02	Evgeni Golov <evgeni@golov.de>
+	* Fixes #34064 - don't override magic `klass` variable
+
+2021-12-02	rbertol <rudnei@redhat.com>
+	* Fixes #33942 - Allow extra vars for awx/tower on snippet template.
+
+2021-12-02	aabramov <aabramov@redhat.com>
+	* Fixes #33801 - Replace obsolete URI.escape method
+
+2021-12-01	Tomer Brisker <tbrisker@gmail.com>
+	* Fixes #33996 - Clean up deprecated methods
+
+2021-12-01	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #33842 - Make ordering by id possible for more models
+
+2021-11-26	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #33991 - Require /lib dependencies in initializers/foreman.rb
+
+2021-11-25	Lukas Zapletal <lzap+git@redhat.com>
+	* Fixes #33929 - improve subnet network exception
+	* Fixes #32461 - add endline in save_to_file
+
+2021-11-25	Shimon Shtein <sshtein@redhat.com>
 	* Fixes #34008 - Add org + loc params to scoped search
-
-2021-11-29	Amit Upadhye <upadhyeammit@gmail.com>
-	* Release 3.1.0-rc2
-	* i18n - extracting new, pulling from tx
-
-2021-11-29	MariaAga <mariaaga@redhat.com>
-	* Fixes #33955 - Host detail page can't fully see build modal
-
-2021-11-29	Tomer Brisker <tbrisker@gmail.com>
-	* Fixes #33935 - Cache setting categories
-
-2021-11-29	Oleh Fedorenko <ofedoren@redhat.com>
-	* Fixes #33907 - Add current_date macro
-
-2021-11-29	Amir Fefer <amirfefer@gmail.com>
-	* Fixes #33882 - refresh host's global status after clearing a sub status
-
-2021-11-29	Dominik Matoulek <domitea@gmail.com>
-	* Fixes #33656 - FactValue search by org and loc
-
-2021-11-29	Trent Anderson <trent.anderson82@gmail.com>
-	* Fixes #32602 - enables puppet 7 agent support
 
 2021-11-25	Leos Stejskal <lstejska@redhat.com>
 	* Fixes #33979 - Registration - name & path to host_init_config template
+	* Fixes #33989 - Fix autoload of constants in ApiPie initializer
 
-2021-11-24	Amir Fefer <amirfefer@gmail.com>
+2021-11-24	Tomer Brisker <tbrisker@gmail.com>
+	* Fixes #34002 - add Foreman
+	* Fixes #33992 - drop truncate_bytes method
+
+2021-11-24	Dominik Matoulek <domitea@users.noreply.github.com>
+	* Fixes #33811 - Inheritance of root password for Hosts
+
+2021-11-24	Ondřej Ezr <oezr@redhat.com>
+	* Fixes #33892 - add setting validations in to_prepare (#8911)
+	* Fixes #33985 - move identifiers to ApplicationRecord
+	* Fixes #33984 - removes custom update methods
+	* Fixes #33986 - moves Callback ensures to separate files
+	* Fixes #33987 - HostMix using Concern properly
+
+2021-11-24	Marek Hulan <mhulan@redhat.com>
+	* Fixes #33981 - fix the RHEL OS name parsing
+
+2021-11-23	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #33967 - Loading constants in initializers/active_record_extensions.rb
+	* Fixes #33968 - Fix loading of Foreman
+	* Fixes #33957 - Require Foreman
+	* Fixes #33964 - Fix loading of Menu
+
+2021-11-23	MariaAga <mariaaga@redhat.com>
+	* Fixes #33955 - Host detail page can't fully see build modal
+
+2021-11-22	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #33950 - Fix early load of ForemanInternal in initializer
+
+2021-11-21	Alexander Olofsson <alexander.olofsson@liu.se>
+	* Fixes #33055: Support ADFS-style JWTs
+
+2021-11-19	Dominik Matoulek <domitea@gmail.com>
+	* Fixes #33656 - FactValue search by org and loc
+
+2021-11-19	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #33949 - Fix early load of plugin fact parsers
+
+2021-11-18	Trent Anderson <trent.anderson82@gmail.com>
+	* Fixes #32602 - enables puppet 7 agent support
+
+2021-11-18	Leos Stejskal <lstejska@redhat.com>
+	* Fixes #33890 - Require Foreman
+
+2021-11-17	Tomer Brisker <tbrisker@gmail.com>
+	* Fixes #33935 - Cache setting categories
+
+2021-11-16	Amir Fefer <amirfefer@gmail.com>
+	* Fixes #33882 - refresh host's global status after clearing a sub status
+
+2021-11-16	Ewoud Kohl van Wijngaarden <ewoud@kohlvanwijngaarden.nl>
+	* Refs #27906 - Add FacterDB test
+	* Fixes #27906 - Always prefer modern facts in Facter
+
+2021-11-16	Stejskal Leos <github@stejskalleos.cz>
+	* Fixes #33865 - API Development Guidelines
+
+2021-11-16	Tomer Brisker <tbrisker@gmail.com>
+	* Fixes #33920 - drop translations for some languages
+
+2021-11-15	Amir Fefer <amirfefer@gmail.com>
 	* Fixes #33872 - disable build option when no permission
 
-2021-11-15	Amit Upadhye <upadhyeammit@gmail.com>
-	* Release 3.1.0-rc1
+2021-11-15	Tomer Brisker <tbrisker@gmail.com>
+	* Refs #33909 - Drop test for deduplicate_subnets module
+	* Refs #33909 - Reset User column information
+	* Refs #33909 - Squash imap column conversion
+	* Refs #33909 - Remove useless User lookup
+	* Refs #33909 - Delete empty migrations
+	* Fixes #33909 - Drop data migrations before Foreman 2.0
+	* Fixes #33906 - Drop fix_db_cache setting
+
+2021-11-14	Oleh Fedorenko <ofedoren@redhat.com>
+	* Fixes #33907 - Add current_date macro
+
+2021-11-14	MariaAga <mariaaga@redhat.com>
+	* Fixes #33681 - delete unused react_pagination_props
+
+2021-11-12	Amit Upadhye <upadhyeammit@gmail.com>
+	* Fixes #33916 - Bump develop to 3.2.0-develop
 
 2021-11-10	Nacho Barrientos <nacho.barrientos@cern.ch>
 	* Fixes #33826 - Better determine if the host has a BMC interface

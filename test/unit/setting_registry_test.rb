@@ -5,7 +5,7 @@ class SettingRegistryTest < ActiveSupport::TestCase
   let(:default) { 5 }
   let(:setting_value) { nil }
   let(:setting_memo) { {} }
-  let(:setting) { Setting.create(registry.find('foo').attributes) }
+  let(:setting) { Setting.create(name: 'foo', category: 'Setting') }
 
   setup do
     registry._add('foo', type: :integer, category: 'Setting', default: default, full_name: 'test foo', description: 'test foo', context: :test)
@@ -38,6 +38,15 @@ class SettingRegistryTest < ActiveSupport::TestCase
       registry.load_values
     end
 
+    it "updates definitions for settings which were changed to their default values" do
+      setting.update(value: 100)
+      registry.load_values
+
+      setting.update(value: nil)
+      registry.expects(:find).once
+      assert registry.load_values
+    end
+
     it "can be forced to load all values" do
       registry.expects(:find).times(Setting.count)
 
@@ -57,6 +66,14 @@ class SettingRegistryTest < ActiveSupport::TestCase
     it 'provides default if no value defined' do
       assert_equal 5, registry['foo']
       assert_equal 5, registry[:foo]
+    end
+
+    it 'returns updated default' do
+      assert_equal default, registry['foo']
+      registry.instance_variable_set(:@settings, {})
+      registry._add('foo', type: :integer, category: 'Setting', default: 10, full_name: 'test foo', description: 'test foo', context: :test)
+      registry.load_values
+      assert_equal 10, registry['foo']
     end
 
     it 'saves the value on assignment' do
@@ -94,28 +111,51 @@ class SettingRegistryTest < ActiveSupport::TestCase
   end
 
   describe '#set_user_value' do
-    setup do
-      registry._add('test',
-        category: 'Setting',
-        default: default,
-        type: :integer,
-        full_name: 'Test Foo',
-        description: 'test update',
-        context: :test)
+    context 'integer setting' do
+      setup do
+        registry._add('test',
+          category: 'Setting',
+          default: default,
+          type: :integer,
+          full_name: 'Test Foo',
+          description: 'test update',
+          context: :test)
+      end
+
+      it 'initiates the DB model if none exists yet' do
+        model = registry.set_user_value('test', '10')
+        assert_not_nil model
+        assert model.valid?
+        assert model.save
+        assert_equal 10, model.reload.value
+      end
+
+      it 'updates the DB model if already exists' do
+        model = Setting.create(name: 'test')
+        registry.set_user_value('test', '10').save
+        assert_equal 10, model.reload.value
+      end
     end
 
-    it 'initiates the DB model if none exists yet' do
-      model = registry.set_user_value('test', '10')
-      assert_not_nil model
-      assert model.valid?
-      assert model.save
-      assert_equal 10, model.reload.value
-    end
+    context 'encrypted setting' do
+      setup do
+        registry._add('test',
+          category: 'Setting',
+          default: 'foo',
+          type: :string,
+          full_name: 'Test Encrypted Foo',
+          description: 'test update',
+          encrypted: true,
+          context: :test)
+        Setting.any_instance.expects(:encryption_key).at_least_once.returns('25d224dd383e92a7e0c82b8bf7c985e815f34cf5')
+      end
 
-    it 'updates the DB model if already exists' do
-      model = Setting.create(registry.find('test').attributes.merge(value: setting_value))
-      registry.set_user_value('test', '10').save
-      assert_equal 10, model.reload.value
+      it 'encrypts the value' do
+        Setting.any_instance.stubs(:setting_definition).returns(registry.find('test'))
+        model = registry.set_user_value('test', 'foobar')
+        model.save
+        assert_includes model.read_attribute(:value), EncryptValue::ENCRYPTION_PREFIX
+      end
     end
   end
 
@@ -140,6 +180,18 @@ class SettingRegistryTest < ActiveSupport::TestCase
       result = registry.search_for('name = "foo"').to_a
       assert_equal 1, result.size
       assert_equal 'foo', result.first.name
+    end
+
+    it 'can find setting by "name ~ value"' do
+      result = registry.search_for('name ~ c_set_t').to_a
+      assert_equal 1, result.size
+      assert_equal 'desc_set_test', result.first.name
+    end
+
+    it 'can find setting by "name ~ value" in full_name' do
+      result = registry.search_for('name ~ "c_set_t"').to_a
+      assert_equal 1, result.size
+      assert_equal 'desc_set_test', result.first.name
     end
 
     it 'can find setting by description' do

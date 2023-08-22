@@ -6,6 +6,8 @@ module ForemanAnsible
     def operatingsystem
       args = { :name => os_name, :major => os_major, :minor => os_minor }
       args[:release_name] = os_release_name if os_name == 'Debian' || os_name == 'Ubuntu'
+      # for Ansible, the CentOS Stream can be identified by missing minor version only
+      args[:name] = "CentOS_Stream" if os_name == 'CentOS' && os_minor.blank?
       return @local_os if local_os(args).present?
       return @new_os if new_os(args).present?
       logger.debug do
@@ -28,15 +30,18 @@ module ForemanAnsible
     end
 
     def debian_os_major_sid
-      case facts[:ansible_distribution_major_version]
-      when /wheezy/i
-        '7'
-      when /jessie/i
-        '8'
-      when /stretch/i
-        '9'
-      when /buster/i
-        '10'
+      release = if facts[:ansible_distribution_major_version] == 'n/a'
+                  facts[:ansible_distribution_release]
+                else
+                  facts[:ansible_distribution_major_version]
+                end
+      case release
+      when /bookworm/i
+        '12'
+      when /trixie/i
+        '13'
+      when /forky/i
+        '14'
       end
     end
 
@@ -47,7 +52,8 @@ module ForemanAnsible
 
     def os_major
       if os_name == 'Debian' &&
-          facts[:ansible_distribution_major_version][%r{\/sid}i]
+          (facts[:ansible_distribution_major_version][%r{\/sid}i] ||
+           facts[:ansible_distribution_major_version] == 'n/a')
         debian_os_major_sid
       else
         facts[:ansible_distribution_major_version] ||
@@ -77,8 +83,7 @@ module ForemanAnsible
 
     def os_name
       if facts[:ansible_os_family] == 'Windows'
-        facts[:ansible_os_name].tr(" \n\t", '') ||
-            facts[:ansible_distribution].tr(" \n\t", '')
+        windows_os_name.tr(" \n\t", '')
       else
         # RHEL 7 is marked as either RedHatEnterpriseServer or RedHatEnterpriseWorkstation, RHEL 8 is lsb id is RedHatEnterprise
         # but we always consider it just RHEL on this level, workstation is differentiated below
@@ -97,10 +102,14 @@ module ForemanAnsible
 
     def os_description
       if facts[:ansible_os_family] == 'Windows'
-        facts[:ansible_os_name].strip || facts[:ansible_distribution].strip
+        windows_os_name
       else
         facts[:ansible_lsb] && facts[:ansible_lsb]['description']
       end
+    end
+
+    def windows_os_name
+      (facts[:ansible_os_name] || facts[:ansible_distribution] || 'Microsoft Windows').strip
     end
   end
 end

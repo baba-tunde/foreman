@@ -19,6 +19,7 @@ class TemplateInput < ApplicationRecord
 
   belongs_to :template
   before_destroy :prevent_delete_if_template_is_locked
+  scoped_search :on => :id, :complete_enabled => false, :only_explicit => true, :validator => ScopedSearch::Validators::INTEGER
   scoped_search :on => :name, :complete_value => true
   scoped_search :on => :input_type, :complete_value => true
 
@@ -32,26 +33,6 @@ class TemplateInput < ApplicationRecord
 
   def input_type_instance
     Foreman.input_types_registry.get(input_type).new if input_type
-  end
-
-  def user_template_input?
-    Foreman::Deprecation.deprecation_warning('2.5', 'use #input_type or #input_type_instance to determine input type')
-    input_type == 'user'
-  end
-
-  def fact_template_input?
-    Foreman::Deprecation.deprecation_warning('2.5', 'use #input_type or #input_type_instance to determine input type')
-    input_type == 'fact'
-  end
-
-  def variable_template_input?
-    Foreman::Deprecation.deprecation_warning('2.5', 'use #input_type or #input_type_instance to determine input type')
-    input_type == 'variable'
-  end
-
-  def puppet_parameter_template_input?
-    Foreman::Deprecation.deprecation_warning('2.5', 'use #input_type or #input_type_instance to determine input type')
-    input_type == 'puppet_parameter'
   end
 
   def preview(scope)

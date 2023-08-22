@@ -337,5 +337,61 @@ module ForemanAnsible
         assert os.valid?
       end
     end
+
+    context 'Windows Server 2016 without admin privileges' do
+      setup do
+        @facts_parser = AnsibleFactParser.new(
+          HashWithIndifferentAccess.new(
+            '_type' => 'ansible',
+            '_timestamp' => '2015-10-29 20:01:51 +0100',
+            'ansible_facts' => {
+              'ansible_architecture' => '64-Bit',
+              'ansible_distribution_major_version' => '10',
+              'ansible_distribution_version' => '10.0.14393.0',
+              'ansible_os_family' => 'Windows',
+              'ansible_system' => 'Win32NT',
+              'ansible_win_rm_certificate_expires' => '2021-01-23 15:08:48',
+              'ansible_windows_domain' => 'example.com',
+            }
+          )
+        )
+      end
+
+      test 'parses Windows Server correctly' do
+        os = @facts_parser.operatingsystem
+        assert_equal '10', os.major
+        assert_equal '10.0.143930', os.release
+        assert_equal '0.143930', os.minor
+        assert_equal 'Windows', os.family
+        assert_equal 'Microsoft Windows', os.description
+        assert_equal 'MicrosoftWindows', os.name
+        assert os.valid?
+      end
+    end
+  end
+
+  class CentOSStreamFactParserTest < ActiveSupport::TestCase
+    context 'CentOS Stream' do
+      setup do
+        facts_stream = HashWithIndifferentAccess.new(read_json_fixture('facts/ansible_centos_stream.json'))
+        facts_8_normal = HashWithIndifferentAccess.new(read_json_fixture('facts/ansible_centos_8.json'))
+        @fact_parser_stream = AnsibleFactParser.new(facts_stream)
+        @fact_parser_8_normal = AnsibleFactParser.new(facts_8_normal)
+      end
+
+      test 'should identify CentOS Stream' do
+        os = @fact_parser_stream.operatingsystem
+        assert_equal 'CentOS_Stream', os.name
+        assert_equal '8', os.major
+        assert_empty os.minor
+      end
+
+      test 'should identify CentOS 8' do
+        os = @fact_parser_8_normal.operatingsystem
+        assert_equal 'CentOS', os.name
+        assert_equal '8', os.major
+        assert_equal '4', os.minor
+      end
+    end
   end
 end

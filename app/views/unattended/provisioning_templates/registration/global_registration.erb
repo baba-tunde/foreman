@@ -10,19 +10,23 @@ description: |
   on the template of host_init_config kind.
 -%>
 #!/bin/sh
+
+# Make sure, all command output can be parsed (e.g. from subscription-manager)
+export LC_ALL=C LANG=C
 <%
     headers = ["-H 'Authorization: Bearer #{@auth_token}'"]
     activation_keys = [(@hostgroup.params['kt_activation_keys'] if @hostgroup), @activation_keys].compact.join(',')
 -%>
 
 # Rendered with following template parameters:
-<%= "# User: [#{@user.login}]" -%>
+<%= "# User: [#{@user.login}]" if @user -%>
 <%= "\n# Organization: [#{@organization.name}]" if @organization -%>
 <%= "\n# Location: [#{@location.name}]" if @location -%>
 <%= "\n# Host group: [#{@hostgroup.title}]" if @hostgroup -%>
 <%= "\n# Operating system: [#{@operatingsystem}]" if @operatingsystem -%>
 <%= "\n# Setup Insights: [#{@setup_insights}]" unless @setup_insights.nil? -%>
 <%= "\n# Setup remote execution: [#{@setup_remote_execution}]" unless @setup_remote_execution.nil? -%>
+<%= "\n# Setup remote execution pull: [#{@setup_remote_execution_pull}]" unless @setup_remote_execution_pull.nil? -%>
 <%= "\n# Remote execution interface: [#{@remote_execution_interface}]" if @remote_execution_interface.present? -%>
 <%= "\n# Packages: [#{@packages}]" if @packages.present? -%>
 <%= "\n# Update packages: [#{@update_packages}]" unless @update_packages.nil? -%>
@@ -35,8 +39,8 @@ description: |
 
 
 if ! [ $(id -u) = 0 ]; then
-    echo "Please run as root"
-    exit 1
+  echo "Please run as root"
+  exit 1
 fi
 
 <%= snippet '3.1-stable-lcsb-pkg_manager' %>
@@ -56,22 +60,30 @@ echo '#'
 echo '# Adding repository'
 echo '#'
 
-if [ -f /etc/redhat-release ]; then
-  cat << EOF > /etc/yum.repos.d/foreman_registration.repo
+
+if [ x$PKG_MANAGER = xdnf -o x$PKG_MANAGER = xyum -o x$PKG_MANAGER = xzypper ]; then
+  cat << EOF > /tmp/foreman_registration.repo
 [foreman_register]
 name=foreman_register
 baseurl=<%= shell_escape @repo %>
 enabled=1
-gpgcheck=<%= @repo_gpg_key_url.present? ? 1 : 0 %>
-gpgkey=<%= shell_escape @repo_gpg_key_url %>
+type=rpm-md
 EOF
-
-  echo "Building yum metadata cache, this may take a few minutes"
-  $PKG_MANAGER makecache
+<% if @repo_gpg_key_url.present? -%>
+  echo gpgcheck=1 >> /tmp/foreman_registration.repo
+  echo gpgkey=<%= shell_escape @repo_gpg_key_url %> >> /tmp/foreman_registration.repo
+<% else -%>
+  echo gpgcheck=0 >> /tmp/foreman_registration.repo
+<% end -%>
+  if [ x$PKG_MANAGER = xdnf -o x$PKG_MANAGER = xyum ]; then
+    mv -f /tmp/foreman_registration.repo /etc/yum.repos.d/foreman_registration.repo
+    echo "Building yum metadata cache, this may take a few minutes"
+    $PKG_MANAGER makecache
+  else
+    zypper --quiet --non-interactive addrepo /tmp/foreman_registration.repo
+  fi
 elif [ -f /etc/debian_version ]; then
-  cat << EOF > /etc/apt/sources.list.d/foreman_registration.list
-<%= shell_escape @repo %>
-EOF
+  <%= save_to_file('/etc/apt/sources.list.d/foreman_registration.list', @repo) %>
 <% if @repo_gpg_key_url.present? -%>
   apt-get -y install ca-certificates gpg
   curl --silent --show-error <%= shell_escape @repo_gpg_key_url %> | apt-key add -
@@ -121,6 +133,7 @@ if [ -f /etc/redhat-release ]; then
 <%= "          --data 'setup_insights=#{@setup_insights}' \\\n" unless @setup_insights.nil? -%>
 <%= "          --data 'setup_remote_execution=#{@setup_remote_execution}' \\\n" unless @setup_remote_execution.nil? -%>
 <%= "          --data remote_execution_interface=#{shell_escape(@remote_execution_interface)} \\\n" if @remote_execution_interface.present? -%>
+<%= "          --data 'setup_remote_execution_pull=#{@setup_remote_execution_pull}' \\\n" unless @setup_remote_execution_pull.nil? -%>
 <%= "          --data packages=#{shell_escape(@packages)} \\\n" if @packages.present? -%>
 <%= "          --data 'update_packages=#{@update_packages}' \\\n" unless @update_packages.nil? -%>
 
@@ -171,9 +184,9 @@ if [ -f /etc/redhat-release ]; then
     # Configure subscription-manager
     test -f $RHSM_CFG.bak || cp $RHSM_CFG $RHSM_CFG.bak
     subscription-manager config \
-      --server.hostname="<%= @rhsm_url.host %>" \
-      --server.port="<%= @rhsm_url.port %>" \
-      --server.prefix="<%= @rhsm_url.path %>" \
+      --server.hostname="<%= @rhsm_url.host if @rhsm_url %>" \
+      --server.port="<%= @rhsm_url.port if @rhsm_url %>" \
+      --server.prefix="<%= @rhsm_url.path if @rhsm_url %>" \
       --rhsm.repo_ca_cert="$KATELLO_SERVER_CA_CERT" \
       --rhsm.baseurl="<%= @pulp_content_url %>"
 
@@ -193,7 +206,7 @@ if [ -f /etc/redhat-release ]; then
     fi
 
     subscription-manager register <%= '--force' if truthy?(@force) %> \
-      --org='<%= @organization.label %>' \
+      --org='<%= @organization.label if @organization %>' \
       --activationkey='<%= activation_keys %>' || <%= truthy?(@ignore_subman_errors) ? 'true' : 'cleanup_and_exit 1' %>
 
     register_katello_host | bash

@@ -20,11 +20,6 @@ Foreman::SettingManager.define(:foreman) do
       description: N_("Number of records shown per page in Foreman"),
       default: 20,
       full_name: N_('Entries per page'))
-    setting('fix_db_cache',
-      type: :boolean,
-      description: N_('Fix DB cache on next Foreman restart'),
-      default: false,
-      full_name: N_('Fix DB cache'))
     setting('db_pending_seed',
       type: :boolean,
       description: N_("Should the `foreman-rake db:seed` be executed on the next run of the installer modules?"),
@@ -37,20 +32,15 @@ Foreman::SettingManager.define(:foreman) do
       full_name: N_('Smart Proxy request timeout'))
     setting('login_text',
       type: :text,
-      description: N_("Text to be shown in the login-page footer"),
-      default: nil,
+      description: N_("Text to be shown in the login-page footer. Keyword $VERSION is replaced by current version."),
+      default: N_("Version") + " $VERSION",
       full_name: N_('Login page footer text'))
-    setting('host_power_status',
-      type: :boolean,
-      description: N_("Show power status on host index page. This feature calls to compute resource providers which may lead to decreased performance on host listing page."),
-      default: true,
-      full_name: N_('Show host power status'))
     setting('http_proxy',
       type: :string,
       description: N_('Set a proxy for all outgoing HTTP(S) connections from Foreman. System-wide proxies must be configured at the operating system level.'),
       default: nil,
       full_name: N_('HTTP(S) proxy'))
-    validates :http_proxy, http_url: { allow_blank: true }
+    validates(:http_proxy, { http_url: { allow_blank: true } })
     setting('http_proxy_except_list',
       type: :array,
       description: N_('Set hostnames to which requests are not to be proxied. Requests to the local host are excluded by default.'),
@@ -68,7 +58,8 @@ Foreman::SettingManager.define(:foreman) do
       full_name: N_('Append domain names to the host'))
     setting('outofsync_interval',
       type: :integer,
-      description: N_('Duration in minutes after servers are classed as out of sync. You can override this on hosts by adding a parameter "outofsync_interval".'),
+      description: N_('Duration in minutes after servers are classed as out of sync. ' \
+                      'This setting is overridden by specific settings from config management tools (e.g. puppet_inteval, ansible_interval).'),
       default: 30,
       full_name: N_('Out of sync interval'))
     setting('instance_id',
@@ -102,7 +93,7 @@ Foreman::SettingManager.define(:foreman) do
     setting('host_details_ui',
       type: :boolean,
       description: N_("Foreman will load the new UI for host details"),
-      default: false,
+      default: true,
       full_name: N_('New host details UI'))
   end
 end

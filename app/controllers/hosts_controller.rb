@@ -33,6 +33,8 @@ class HostsController < ApplicationController
   before_action :set_host_type, :only => [:update]
   before_action :find_multiple, :only => MULTIPLE_ACTIONS
   before_action :validate_power_action, :only => :update_multiple_power_state
+  # index action is already included in ApplicationController
+  before_action(:only => SEARCHABLE_ACTIONS.without('index')) { find_selected_columns }
 
   helper :hosts, :reports, :interfaces
 
@@ -46,9 +48,8 @@ class HostsController < ApplicationController
     respond_to do |format|
       format.html do
         @hosts = search.includes(included_associations).paginate(:page => params[:page], :per_page => params[:per_page])
-        # SQL optimizations queries
-        @last_report_ids = ConfigReport.where(:host_id => @hosts.map(&:id)).group(:host_id).maximum(:id)
-        @last_reports = ConfigReport.where(:id => @last_report_ids.values)
+        # SQL optimization
+        preload_reports
         # rendering index page for non index page requests (out of sync hosts etc)
         @hostgroup_authorizer = Authorizer.new(User.current, :collection => @hosts.map(&:hostgroup_id).compact.uniq)
         render :index if title && (@title = title)
@@ -524,6 +525,7 @@ class HostsController < ApplicationController
       success = true
       forward_url_options(host)
       begin
+        host.built(false) if host.build? && host.token_expired?
         host.setBuild
         host.power.reset if host.supports_power_and_running? && reboot
       rescue => error
@@ -656,12 +658,17 @@ class HostsController < ApplicationController
   end
 
   def statuses
+    host_statuses = @host.host_statuses
+    # Do not show legacy configuration report when Host Report is installed.
+    if Foreman::Plugin.installed?('foreman_host_reports')
+      host_statuses = host_statuses.where("type != 'HostStatus::ConfigurationStatus'")
+    end
     statuses = {
       global: @host.global_status,
       captions: HostStatus.status_registry.map do |status_class|
         status_class.status_name
       end,
-      statuses: @host.host_statuses.map do |status|
+      statuses: host_statuses.map do |status|
         {
           id: status.id,
           name: status.name,
@@ -677,6 +684,11 @@ class HostsController < ApplicationController
   end
 
   private
+
+  def preload_reports
+    @last_report_ids = ConfigReport.where(:host_id => @hosts.map(&:id)).reorder('').group(:host_id).maximum(:id)
+    @last_reports = ConfigReport.where(:id => @last_report_ids.values)
+  end
 
   def resource_base
     @resource_base ||= Host.authorized(current_permission, Host)

@@ -12,7 +12,7 @@ description: |
   os_minor = @host.operatingsystem.minor.to_i
   # safemode renderer does not support unary negation
   aio_enabled = host_param_true?('enable-puppetlabs-puppet5-repo') || host_param_true?('enable-puppet5')
-  puppet_enabled = host_puppet_server.present? || host_param_true?('force-puppet')
+  puppet_enabled = !host_param_true?('skip-puppet-setup') && (host_puppet_server.present? || host_param_true?('force-puppet'))
   salt_enabled = host_param('salt_master') ? true : false
   sles_minor_string = (os_minor == 0) ? '' : "_SP#{os_minor}"
   spacewalk_enabled = host_param('spacewalk_host') ? true : false
@@ -34,7 +34,9 @@ description: |
       <hostname><%= @host.name %></hostname>
 <% unless primary_interface_subnet.dhcp_boot_mode? -%>
       <dhcp_hostname config:type="boolean">false</dhcp_hostname>
+<% if os_major < 12 -%>
       <dhcp_resolv config:type="boolean">false</dhcp_resolv>
+<% end -%>
 <% if @host.domain -%>
       <domain><%= @host.domain -%></domain>
 <% end -%>
@@ -122,6 +124,16 @@ description: |
 <% if ! @dynamic -%>
   <%= @host.diskLayout %>
 <% end -%>
+<% if os_major >= 15 -%>
+  <services-manager>
+  <default_target>multi-user</default_target>
+  <services>
+    <enable config:type="list">
+      <service>sshd</service>
+    </enable>
+  </services>
+  </services-manager>
+<% else -%>
   <runlevel>
     <default>3</default>
     <services config:type="list">
@@ -131,6 +143,7 @@ description: |
       </service>
     </services>
   </runlevel>
+<% end -%>
   <software>
 <% if os_major >= 15 -%>
     <products config:type="list">
@@ -204,6 +217,8 @@ cp /etc/resolv.conf /mnt/etc
         <source><![CDATA[
 /bin/hostname <%= @host.name %>
 
+<%= snippet_if_exists(template_name + " custom pre") -%>
+
 <%= snippet('remote_execution_ssh_keys') %>
 
 <%= snippet "blacklist_kernel_modules" %>
@@ -220,6 +235,8 @@ cp /etc/resolv.conf /mnt/etc
 <%= snippet '3.1-stable-lcsb-saltstack_setup' %>
 <% end -%>
 
+<%= snippet_if_exists(template_name + " custom post") -%>
+
 <%= snippet '3.1-stable-lcsb-eject_cdrom' -%>
 <%= snippet '3.1-stable-lcsb-built' -%>
 
@@ -229,6 +246,22 @@ rm /etc/resolv.conf
       </script>
     </chroot-scripts>
   </scripts>
+<% if os_major >= 15 -%>
+  <firewall>
+    <enable_firewall config:type="boolean">true</enable_firewall>
+    <log_denied_packets>off</log_denied_packets>
+    <default_zone>public</default_zone>
+    <zones config:type="list">
+      <zone>
+        <name>public</name>
+        <services config:type="list">
+          <service>ssh</service>
+          <service>dhcpv6-client</service>
+        </services>
+      </zone>
+    </zones>
+  </firewall>
+<% end -%>
   <keyboard>
     <keymap>english-us</keymap>
   </keyboard>
@@ -244,7 +277,7 @@ rm /etc/resolv.conf
         <product_dir>/Module-Basesystem</product_dir>
         <product>sle-module-basesystem</product>
       </listentry>
-  <% if os_minor >= 1 && host_param('sle-module-basesystem-url') -%>
+  <% if os_minor >= 1 && os_minor < 4 && host_param('sle-module-basesystem-url') -%>
       <listentry>
         <media_url><%= host_param('sle-module-basesystem-url') %></media_url>
         <product_dir>/Module-Python2</product_dir>

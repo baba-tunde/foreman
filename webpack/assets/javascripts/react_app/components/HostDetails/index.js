@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Flex,
   FlexItem,
@@ -9,10 +10,8 @@ import {
   Tab,
   Tabs,
   GridItem,
-  Badge,
+  Label,
   Title,
-  Breadcrumb,
-  BreadcrumbItem,
   Text,
   TextVariants,
   PageSection,
@@ -20,7 +19,6 @@ import {
   SplitItem,
 } from '@patternfly/react-core';
 
-import Skeleton from 'react-loading-skeleton';
 import RelativeDateTime from '../../components/common/dates/RelativeDateTime';
 import {
   selectFillsIDs,
@@ -39,7 +37,11 @@ import { STATUS } from '../../constants';
 import './HostDetails.scss';
 import { useAPI } from '../../common/hooks/API/APIHooks';
 import TabRouter from './Tabs/TabRouter';
-import ExperimentalAlert from './ExperimentalAlert';
+import RedirectToEmptyHostPage from './EmptyState';
+import BreadcrumbBar from '../BreadcrumbBar';
+import { foremanUrl } from '../../common/helpers';
+import { CardExpansionContextWrapper } from './CardExpansionContext';
+import Head from '../Head';
 
 const HostDetails = ({
   match: {
@@ -67,7 +69,6 @@ const HostDetails = ({
   useEffect(() => {
     if (tabs?.length) dispatchEvent(new Event('resize'));
   }, [tabs]);
-
   useEffect(() => {
     registerCoreTabs();
   }, []);
@@ -79,22 +80,49 @@ const HostDetails = ({
       .split('?')[0] // Remove query params
   );
 
+  const filteredTabs =
+    tabs?.filter(
+      tab => !slotMetadata?.[tab]?.hideTab?.({ hostDetails: response })
+    ) ?? [];
+
+  if (status === STATUS.ERROR) return <RedirectToEmptyHostPage hostname={id} />;
   return (
     <>
+      <Head>
+        <title>{id}</title>
+      </Head>
       <PageSection
         className="host-details-header-section"
         isFilled
         variant="light"
       >
         <div className="header-top">
-          <Breadcrumb className="host-details-breadcrumb">
-            <BreadcrumbItem to="/hosts">{__('Hosts')}</BreadcrumbItem>
-            <BreadcrumbItem isActive>
-              {response.name || <Skeleton />}
-            </BreadcrumbItem>
-          </Breadcrumb>
+          <SkeletonLoader
+            skeletonProps={{ width: 300 }}
+            status={status || STATUS.PENDING}
+          >
+            {response.name && (
+              <BreadcrumbBar
+                isSwitchable
+                isPf4
+                onSwitcherItemClick={(e, href) => {
+                  e.preventDefault();
+                  history.push(href);
+                }}
+                resource={{
+                  nameField: 'name',
+                  resourceUrl: '/api/v2/hosts?thin=true',
+                  switcherItemUrl: '/new/hosts/:name',
+                }}
+                breadcrumbItems={[
+                  { caption: __('Hosts'), url: foremanUrl('/hosts') },
+                  { caption: response.name },
+                ]}
+              />
+            )}
+          </SkeletonLoader>
           <Grid className="hostname-skeleton-rapper">
-            <GridItem span={9}>
+            <GridItem span={8}>
               <SkeletonLoader status={status || STATUS.PENDING}>
                 {response && (
                   <>
@@ -102,6 +130,7 @@ const HostDetails = ({
                       <SkeletonLoader status={status || STATUS.PENDING}>
                         {response && (
                           <Title
+                            ouiaId="hostname-truncate-title"
                             className="hostname-truncate"
                             headingLevel="h5"
                             size="2xl"
@@ -113,25 +142,64 @@ const HostDetails = ({
                     </div>
                     <Split style={{ display: 'inline-flex' }} hasGutter>
                       <SplitItem>
-                        <HostGlobalStatus hostName={id} />
+                        <HostGlobalStatus
+                          hostName={id}
+                          canForgetStatuses={
+                            !!response?.permissions?.forget_status_hosts
+                          }
+                        />
                       </SplitItem>
                       <SplitItem>
-                        <Badge> {response?.operatingsystem_name}</Badge>
+                        <Label
+                          isCompact
+                          color="blue"
+                          render={({ className, content, componentRef }) => (
+                            <Link
+                              to={`/hosts?search=os_title="${response?.operatingsystem_name}"`}
+                              className={className}
+                              innerRef={componentRef}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {content}
+                            </Link>
+                          )}
+                        >
+                          {response?.operatingsystem_name}
+                        </Label>
                       </SplitItem>
                       <SplitItem>
-                        <Badge>{response?.architecture_name}</Badge>
+                        <Label
+                          isCompact
+                          color="blue"
+                          render={({ className, content, componentRef }) => (
+                            <Link
+                              to={`/hosts?search=architecture=${response?.architecture_name}`}
+                              className={className}
+                              innerRef={componentRef}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {content}
+                            </Link>
+                          )}
+                        >
+                          {response?.architecture_name}
+                        </Label>
                       </SplitItem>
                     </Split>
                   </>
                 )}
               </SkeletonLoader>
             </GridItem>
-            <GridItem offset={10} span={2}>
+            <GridItem offset={8} span={4}>
               <Flex>
                 <FlexItem align={{ default: 'alignRight' }}>
                   <ActionsBar
                     computeId={response.compute_resource_id}
-                    hostId={id}
+                    hostFriendlyId={id}
+                    hostId={response.id}
+                    hostName={response.name}
                     permissions={response.permissions}
                     hasReports={!!response.last_report}
                     isBuild={response.build}
@@ -145,10 +213,13 @@ const HostDetails = ({
             status={status || STATUS.PENDING}
           >
             {response && (
-              <Text component={TextVariants.span}>
+              <Text ouiaId="date-text" component={TextVariants.span}>
                 <RelativeDateTime date={response.created_at} defaultValue="N/A">
                   {date =>
-                    sprintf(__('Created %s by %s'), date, response.owner_name)
+                    sprintf(__('Created %(date)s by %(owner)s'), {
+                      date,
+                      owner: response.owner_name,
+                    })
                   }
                 </RelativeDateTime>{' '}
                 <RelativeDateTime date={response.updated_at} defaultValue="N/A">
@@ -158,30 +229,32 @@ const HostDetails = ({
             )}
           </SkeletonLoader>
         </div>
-        <ExperimentalAlert hostId={id} />
         {tabs && (
-          <TabRouter
-            response={response}
-            hostName={id}
-            status={status}
-            tabs={tabs}
-            router={history}
-          >
-            <Tabs
-              activeKey={activeTab}
-              className={`host-details-tabs tab-width-${
-                isNavCollapsed ? '138' : '263'
-              }`}
+          <CardExpansionContextWrapper>
+            <TabRouter
+              response={response}
+              hostName={id}
+              status={status}
+              tabs={tabs}
+              router={history}
             >
-              {tabs.map(tab => (
-                <Tab
-                  key={tab}
-                  eventKey={tab}
-                  title={slotMetadata?.[tab]?.title || tab}
-                />
-              ))}
-            </Tabs>
-          </TabRouter>
+              <Tabs
+                ouiaId="host-details-tabs"
+                activeKey={activeTab}
+                className={`host-details-tabs tab-width-${
+                  isNavCollapsed ? '138' : '263'
+                }`}
+              >
+                {filteredTabs.map(tab => (
+                  <Tab
+                    key={tab}
+                    eventKey={tab}
+                    title={slotMetadata?.[tab]?.title || tab}
+                  />
+                ))}
+              </Tabs>
+            </TabRouter>
+          </CardExpansionContextWrapper>
         )}
       </PageSection>
     </>

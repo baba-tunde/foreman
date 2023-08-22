@@ -16,6 +16,7 @@ window.open = args => {
 const historyPush = jest.spyOn(history, 'push');
 
 const commonFixture = {
+  id: 'architectures',
   controller: 'architectures',
   onBookmarkClick: () => {},
   url: '/api/v2/architectures',
@@ -45,9 +46,11 @@ describe('Bookmarks', () => {
       pathname: '/bookmarks',
       search: '?page=1&per_page=25&search=controller%3Darchitectures',
     });
+    await act(async () => {
+      fireEvent.click(screen.getByLabelText('bookmarks dropdown toggle'));
+    });
     fireEvent.click(screen.getByText('Documentation'));
     expect(helpersNewWindow).toHaveBeenCalledWith('https://test-docs.com');
-    expect(screen.queryAllByText('Documentation')).toHaveLength(1);
   });
   it('success load with no bookmarks has all base items', async () => {
     render(
@@ -66,9 +69,11 @@ describe('Bookmarks', () => {
       pathname: '/bookmarks',
       search: '?page=1&per_page=25&search=controller%3Darchitectures',
     });
+    await act(async () => {
+      fireEvent.click(screen.getByLabelText('bookmarks dropdown toggle'));
+    });
     fireEvent.click(screen.getByText('Documentation'));
     expect(helpersNewWindow).toHaveBeenCalledWith('https://test-docs.com');
-    expect(screen.queryAllByText('Documentation')).toHaveLength(1);
   });
 
   it('bookmark click', async () => {
@@ -120,10 +125,17 @@ describe('Bookmarks', () => {
       pathname: '/bookmarks',
       search: '?page=1&per_page=25&search=controller%3Darchitectures',
     });
+    await act(async () => {
+      fireEvent.click(screen.getByLabelText('bookmarks dropdown toggle'));
+    });
     fireEvent.click(screen.getByText('Documentation'));
     expect(helpersNewWindow).toHaveBeenCalledWith('https://test-docs.com');
-    expect(screen.queryAllByText('Documentation')).toHaveLength(1);
     expect(screen.queryAllByLabelText('loading bookmarks')).toHaveLength(0);
-    expect(screen.queryAllByText('Failed to load bookmarks: Random test error')).toHaveLength(1);
+    await act(async () => {
+      fireEvent.click(screen.getByLabelText('bookmarks dropdown toggle'));
+    });
+    expect(
+      screen.queryAllByText('Failed to load bookmarks: Random test error')
+    ).toHaveLength(1);
   });
 });

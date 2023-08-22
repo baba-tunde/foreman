@@ -4,16 +4,16 @@ module HostInfoProviders
       # Static parameters
       param = {}
 
-      param["hostname"] = host.shortname unless host.shortname.nil?
-      param["fqdn"] = host.fqdn unless host.fqdn.nil?
+      param["foreman_hostname"] = host.shortname unless host.shortname.nil?
+      param["foreman_fqdn"] = host.fqdn unless host.fqdn.nil?
       param["hostgroup"] = host.hostgroup.to_label unless host.hostgroup.nil?
       param["comment"] = host.comment if host.comment.present?
+      param["root_pw"] = host.root_pass unless (!host.operatingsystem.nil? && host.operatingsystem.password_hash == 'Base64')
 
       add_network_params param
       add_taxonomy_params param
       add_domain_params param
       add_login_params param
-      add_unattended_params param
 
       # Parse ERB values contained in the parameters
       param = ParameterSafeRender.new(self).render(param)
@@ -22,12 +22,6 @@ module HostInfoProviders
     end
 
     private
-
-    def add_unattended_params(param)
-      return unless SETTINGS[:unattended]
-
-      param["root_pw"] = host.root_pass unless (!host.operatingsystem.nil? && host.operatingsystem.password_hash == 'Base64')
-    end
 
     def add_login_params(param)
       owner = host.owner

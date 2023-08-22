@@ -32,11 +32,6 @@ Foreman::SettingManager.define(:foreman) do
       description: N_('Only known Smart Proxies may access features that use Smart Proxy authentication'),
       default: true,
       full_name: N_('Restrict registered smart proxies'))
-    setting('require_ssl_smart_proxies',
-      type: :boolean,
-      description: N_('Client SSL certificates are used to identify Smart Proxies (:require_ssl should also be enabled)'),
-      default: true,
-      full_name: N_('Require SSL for smart proxies'))
     setting('trusted_hosts',
       type: :array,
       description: N_('List of hostnames, IPv4, IPv6 addresses or subnets to be trusted in addition to Smart Proxies for access to fact/report importers and ENC output'),
@@ -123,20 +118,27 @@ Foreman::SettingManager.define(:foreman) do
       description: N_("Log out idle users after a certain number of minutes"),
       default: 60,
       full_name: N_('Idle timeout'))
+    setting('password_hash',
+      type: :string,
+      description: N_("Password hashing algorithm. A password change is needed effect existing passwords."),
+      default: 'bcrypt',
+      full_name: N_('Password hashing algorithm'),
+      collection: proc { { 'sha1' => _("SHA1"), 'bcrypt' => _("BCrypt"), 'pbkdf2sha1' => _("PBKDF2 SHA1") } })
     setting('bcrypt_cost',
       type: :integer,
       description: N_("Cost value of bcrypt password hash function for internal auth-sources (4-30). A higher value is safer but verification is slower, particularly for stateless API calls and UI logins. A password change is needed effect existing passwords."),
       default: 4,
       full_name: N_('BCrypt password cost'))
+    setting('pbkdf2_cost',
+      type: :integer,
+      description: N_("Cost value of PBKDF2 password hash function for internal auth-sources. A higher value is safer but verification is slower, particularly for stateless API calls and UI logins. A password change is needed effect existing passwords."),
+      default: 50000,
+      full_name: N_('PBKDF2 password cost'))
     setting('bmc_credentials_accessible',
       type: :boolean,
       description: N_("Permits access to BMC interface passwords through ENC YAML output and in templates"),
-      default: true,
+      default: false,
       full_name: N_('BMC credentials access'))
-    validates('bmc_credentials_accessible',
-      ->(value) { value || Setting[:safemode_render] },
-      message: N_("Unable to disable bmc_credentials_accessible when safemode_render is disabled"))
-
     setting('oidc_jwks_url',
       type: :string,
       description: N_("OpenID Connect JSON Web Key Set(JWKS) URL. Typically https://keycloak.example.com/auth/realms/<realm name>/protocol/openid-connect/certs when using Keycloak as an OpenID provider"),

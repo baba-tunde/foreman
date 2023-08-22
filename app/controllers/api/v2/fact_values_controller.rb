@@ -14,13 +14,20 @@ module Api
           my_facts.
           no_timestamp_facts.
           search_for(*search_options).paginate(paginate_options).
-          preload(:fact_name, :host)
-        @fact_values = FactValue.build_facts_hash(values.all)
+          joins(:fact_name, :host).
+          pluck(:value, 'fact_names.name', 'hosts.name')
+        @fact_values = build_facts_hash(values)
       end
 
       def setup_search_options
         params[:search] ||= ""
         params[:search] += " host = " + params[:host_id] if params[:host_id]
+      end
+
+      private
+
+      def build_facts_hash(facts)
+        facts.each_with_object({}) { |(value, factname, hostname), h| (h[hostname] ||= {})[factname] = value }
       end
     end
   end

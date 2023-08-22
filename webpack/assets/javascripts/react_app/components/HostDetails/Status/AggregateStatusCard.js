@@ -79,6 +79,8 @@ const AggregateStatusCard = ({
     warnStatus.length === 0 &&
     errorStatus.length === 0;
 
+  const allStatusesCleared = isOKState && okStatuses.length === 0;
+
   const hadleIconClick = type => {
     setChosenType(type);
     setOpenModal(true);
@@ -86,11 +88,16 @@ const AggregateStatusCard = ({
 
   return (
     <GridItem xl2={3} xl={4} md={6} lg={4}>
-      <Card className="card-pf-aggregate-status" isHoverable>
+      <Card className="card-pf-aggregate-status" ouiaId="card-aggregate-status">
         <CardTitle>
           <span>
-            {__('Host Status')}
-            {!isOKState && <StatusIcon statusNumber={global} />}
+            <span style={{ marginRight: '0.5rem' }}>{__('Host status')}</span>
+            {!isOKState && (
+              <StatusIcon
+                statusNumber={global}
+                style={{ position: 'relative', top: '2px' }}
+              />
+            )}
           </span>
         </CardTitle>
         <CardBody style={{ height: '129px' }}>
@@ -98,9 +105,10 @@ const AggregateStatusCard = ({
             cannotViewStatuses={!canViewStatuses}
             isOKState={isOKState}
             responseStatus={responseStatus}
+            allStatusesCleared={allStatusesCleared}
           >
             <Bullseye>
-              <p className="card-pf-aggregate-status-notifications">
+              <span className="card-pf-aggregate-status-notifications">
                 {SUPPORTED_STATUSES.map(({ label, status }) => (
                   <AggregateStatusItem
                     key={`status-${label}`}
@@ -111,7 +119,7 @@ const AggregateStatusCard = ({
                     amount={statusesMapper(status).length}
                   />
                 ))}
-              </p>
+              </span>
             </Bullseye>
           </GlobalState>
         </CardBody>
